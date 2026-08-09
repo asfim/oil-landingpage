@@ -345,30 +345,31 @@
     .offer-card-inner {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 20px;
     }
 
     .offer-img-box {
       position: relative;
-      width: 120px;
-      height: 140px;
-      border-radius: 16px;
+      width: 160px;
+      height: 190px;
+      border-radius: 18px;
       overflow: hidden;
       background: radial-gradient(circle at 50% 50%, #F1F7F4, #E5EFEA);
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 8px;
-      border: 1px solid rgba(18,55,30,0.08);
+      padding: 10px;
+      border: 1px solid rgba(18,55,30,0.1);
+      box-shadow: inset 0 0 20px rgba(18,75,40,0.04);
     }
     .offer-img-glow {
       position: absolute;
-      width: 80px;
-      height: 80px;
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
-      filter: blur(10px);
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, transparent 70%);
+      filter: blur(12px);
       pointer-events: none;
     }
     .offer-img-box img {
@@ -478,17 +479,17 @@
         padding: 18px 16px;
       }
       .offer-card-inner {
-        gap: 12px;
+        gap: 14px;
       }
       .offer-img-box {
-        width: 95px;
-        height: 115px;
+        width: 125px;
+        height: 150px;
       }
       .offer-title {
         font-size: 16px;
       }
       .price-row.offer-price .new-val {
-        font-size: 21px;
+        font-size: 22px;
       }
     }
 
