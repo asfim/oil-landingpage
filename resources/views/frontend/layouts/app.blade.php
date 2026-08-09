@@ -515,15 +515,16 @@
 
     /* ============ VIDEO ============ */
     .video-card {
-      position: relative; border-radius: 28px; overflow: hidden;
-      border: 1px solid rgba(18,55,30,0.12); aspect-ratio: 16/9; max-height: 680px;
+      position: relative; border-radius: 22px; overflow: hidden;
+      border: 1px solid rgba(18,55,30,0.12); aspect-ratio: 16/9;
+      max-width: 860px; max-height: 480px;
       width: 100%; margin: 0 auto;
       background: #FFFFFF;
-      box-shadow: 0 30px 80px rgba(18,55,30,0.12);
+      box-shadow: 0 20px 50px rgba(18,55,30,0.08);
       transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
     }
     .video-card:hover {
-      box-shadow: 0 36px 90px rgba(18,55,30,0.16);
+      box-shadow: 0 24px 60px rgba(18,55,30,0.12);
     }
     .video-card::before {
       content: ''; position: absolute; inset: 0;
@@ -537,12 +538,12 @@
     }
     .video-play.hidden { opacity: 0; pointer-events: none; }
     .play-btn {
-      width: 96px; height: 96px; border-radius: 50%; background: #FFFFFF; color: var(--ion);
+      width: 78px; height: 78px; border-radius: 50%; background: #FFFFFF; color: var(--ion);
       display: flex; align-items: center; justify-content: center; transition: transform .3s var(--ease), box-shadow .3s var(--ease);
-      box-shadow: 0 20px 50px rgba(18,75,40,0.35), 0 0 0 12px rgba(255,255,255,0.25);
+      box-shadow: 0 16px 40px rgba(18,75,40,0.3), 0 0 0 10px rgba(255,255,255,0.25);
     }
-    .video-play:hover .play-btn { transform: scale(1.1); box-shadow: 0 25px 60px rgba(18,75,40,0.45), 0 0 0 18px rgba(255,255,255,0.35); }
-    .play-btn svg { width: 32px; height: 32px; margin-left: 5px; fill: var(--ion); }
+    .video-play:hover .play-btn { transform: scale(1.08); box-shadow: 0 20px 50px rgba(18,75,40,0.4), 0 0 0 14px rgba(255,255,255,0.35); }
+    .play-btn svg { width: 26px; height: 26px; margin-left: 4px; fill: var(--ion); }
 
     /* ============ WHY CHOOSE ============ */
     .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
