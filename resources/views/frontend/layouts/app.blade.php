@@ -565,22 +565,6 @@
       border-color: rgba(18, 75, 40, 0.2);
       box-shadow: 0 22px 50px rgba(18, 55, 30, 0.09);
     }
-    .why-card-num {
-      position: absolute;
-      top: 18px;
-      right: 22px;
-      font-family: var(--font-mono);
-      font-size: 30px;
-      font-weight: 800;
-      color: var(--ion);
-      opacity: 0.12;
-      pointer-events: none;
-      transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
-    }
-    .why-card:hover .why-card-num {
-      opacity: 0.25;
-      transform: scale(1.1);
-    }
     .why-icon {
       width: 54px;
       height: 54px;
