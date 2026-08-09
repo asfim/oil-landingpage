@@ -304,11 +304,11 @@
       position: relative;
       background: #FFFFFF;
       color: var(--text);
-      border: 1px solid rgba(18,55,30,0.12);
+      border: 1px solid rgba(18, 55, 30, 0.07);
       border-radius: 22px;
       padding: 24px 22px;
       cursor: pointer;
-      box-shadow: 0 10px 30px rgba(18, 55, 30, 0.04);
+      box-shadow: 0 10px 30px rgba(18, 55, 30, 0.03);
       transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
       overflow: hidden;
     }
