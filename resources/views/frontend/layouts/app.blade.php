@@ -216,16 +216,16 @@
     .hero-trust div { font-family: var(--font-mono); font-size: 13px; color: var(--text-dim); }
     .hero-trust strong { display: block; font-family: var(--font-display); font-size: 20px; color: var(--text); font-weight: 700; }
 
-    .hero-stage { position: relative; height: 480px; display: flex; align-items: center; justify-content: center; }
+    .hero-stage { position: relative; height: 560px; display: flex; align-items: center; justify-content: center; }
     .hero-stage .orbit {
-      position: absolute; width: 380px; height: 380px; border-radius: 50%;
+      position: absolute; width: 440px; height: 440px; border-radius: 50%;
       border: 1.5px dashed rgba(18, 75, 40, 0.2);
       animation: spin 26s linear infinite;
     }
-    .hero-stage .orbit.o2 { width: 290px; height: 290px; animation-duration: 20s; animation-direction: reverse; border-color: rgba(245, 158, 11, 0.25); }
+    .hero-stage .orbit.o2 { width: 340px; height: 340px; animation-duration: 20s; animation-direction: reverse; border-color: rgba(245, 158, 11, 0.25); }
     @keyframes spin { to { transform: rotate(360deg); } }
     .hero-product {
-      position: relative; width: 260px; height: 440px; display: flex; align-items: center; justify-content: center;
+      position: relative; width: 320px; height: 540px; display: flex; align-items: center; justify-content: center;
       filter: drop-shadow(0 20px 45px rgba(18, 75, 40, 0.12));
       transition: transform 0.15s ease-out;
     }
