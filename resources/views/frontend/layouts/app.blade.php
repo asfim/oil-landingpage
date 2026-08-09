@@ -647,15 +647,15 @@
       box-shadow: 0 0 0 2px var(--ion), 0 6px 20px rgba(18, 75, 40, 0.08);
     }
     .v-prod-img {
-      width: 52px;
-      height: 58px;
-      border-radius: 10px;
+      width: 72px;
+      height: 78px;
+      border-radius: 12px;
       background: #FFFFFF;
       border: 1px solid rgba(18, 55, 30, 0.08);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
+      padding: 5px;
       flex-shrink: 0;
     }
     .v-prod-img img {
@@ -668,26 +668,24 @@
       min-width: 0;
     }
     .v-prod-name {
-      font-size: 14.5px;
+      font-size: 13px;
       font-weight: 700;
       color: #0B1910;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      line-height: 1.3;
     }
     .v-prod-price {
       display: flex;
       align-items: baseline;
-      gap: 8px;
-      margin-top: 2px;
+      gap: 6px;
+      margin-top: 3px;
     }
     .v-prod-price .now {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 800;
       color: var(--ion);
     }
     .v-prod-price .old {
-      font-size: 12.5px;
+      font-size: 11.5px;
       color: var(--text-dim);
       text-decoration: line-through;
     }
