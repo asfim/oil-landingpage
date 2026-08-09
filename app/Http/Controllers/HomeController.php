@@ -60,22 +60,31 @@ class HomeController extends Controller
             'customer_name' => 'required|string|max:255',
             'phone' => ['required', 'regex:/^0\d{10}$/'],
             'address' => 'required|string|max:1000',
-            'product_id' => 'required|exists:products,id',
+            'product_ids' => 'required|array|min:1',
+            'product_ids.*' => 'exists:products,id',
             'quantity' => 'required|integer|min:1|max:10',
         ]);
 
-        $product = Product::findOrFail($validated['product_id']);
+        $products = Product::whereIn('id', $validated['product_ids'])->get();
+        
+        $subtotal = 0;
+        $productNames = [];
+        foreach ($products as $p) {
+            $subtotal += $p->price;
+            $productNames[] = $p->name;
+        }
+
         $deliveryCharge = 60.00;
-        $totalAmount = ($product->price * $validated['quantity']) + $deliveryCharge;
+        $totalAmount = ($subtotal * $validated['quantity']) + $deliveryCharge;
 
         $order = Order::create([
             'customer_name' => $validated['customer_name'],
             'phone' => $validated['phone'],
             'address' => $validated['address'],
-            'product_id' => $product->id,
-            'product_name' => $product->name,
+            'product_id' => null,
+            'product_name' => implode(' + ', $productNames),
             'quantity' => $validated['quantity'],
-            'unit_price' => $product->price,
+            'unit_price' => $subtotal,
             'delivery_charge' => $deliveryCharge,
             'total_amount' => $totalAmount,
             'status' => 'pending',

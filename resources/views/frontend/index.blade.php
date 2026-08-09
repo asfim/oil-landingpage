@@ -186,9 +186,9 @@
           </div>
           <div class="field" id="f-product">
             <label>প্রোডাক্ট বাছাই করুন</label>
-            <select name="product_id" id="productSelect" style="display:none;">
+            <select name="product_ids[]" id="productSelect" style="display:none;" multiple>
               @foreach($products as $p)
-                <option value="{{ $p->id }}" data-price="{{ $p->price }}">{{ $p->name }} — ৳{{ number_format($p->price, 0) }}</option>
+                <option value="{{ $p->id }}" data-price="{{ $p->price }}" {{ $loop->first ? 'selected' : '' }}>{{ $p->name }} — ৳{{ number_format($p->price, 0) }}</option>
               @endforeach
             </select>
             
@@ -256,12 +256,22 @@
   }
 
   function updateSummary() {
-    const selectedId = parseInt(productSelect.value);
-    const p = PRODUCTS_DATA.find(x => x.id === selectedId) || PRODUCTS_DATA[0];
-    if (!p) return;
+    let subtotal = 0;
+    const selectedItems = document.querySelectorAll('.v-prod-item.active');
+    selectedItems.forEach(item => {
+      const pId = parseInt(item.getAttribute('data-id'));
+      const p = PRODUCTS_DATA.find(x => x.id === pId);
+      if (p) subtotal += parseFloat(p.price);
+    });
+
+    if (subtotal === 0) { // Fallback if no visual items are active
+      const p = PRODUCTS_DATA[0];
+      if (p) subtotal = parseFloat(p.price);
+    }
+
     const qty = Math.max(1, parseInt(qtyInput.value) || 1);
-    const total = (parseFloat(p.price) * qty) + DELIVERY_CHARGE;
-    sumPrice.textContent = fmt(p.price);
+    const total = (subtotal * qty) + DELIVERY_CHARGE;
+    sumPrice.textContent = fmt(subtotal);
     sumQty.textContent = qty;
     sumDelivery.textContent = fmt(DELIVERY_CHARGE);
     sumTotal.textContent = fmt(total);
@@ -270,13 +280,30 @@
   const visualItems = document.querySelectorAll('.v-prod-item');
   visualItems.forEach(item => {
     item.addEventListener('click', () => {
-      visualItems.forEach(v => v.classList.remove('active'));
-      item.classList.add('active');
-      const pId = item.getAttribute('data-id');
+      // Toggle selection
+      item.classList.toggle('active');
+      
+      // Ensure at least one is selected
+      const selectedActive = document.querySelectorAll('.v-prod-item.active');
+      if(selectedActive.length === 0) {
+        item.classList.add('active');
+        return;
+      }
+
       if (productSelect) {
-        productSelect.value = pId;
+        // Update hidden select
+        const options = productSelect.options;
+        for (let i = 0; i < options.length; i++) {
+          const pId = options[i].value;
+          const vItem = document.querySelector(`.v-prod-item[data-id="${pId}"]`);
+          if (vItem) options[i].selected = vItem.classList.contains('active');
+        }
+        
+        // Sync top cards
         productCards.forEach(c => {
-          c.classList.toggle('selected', c.getAttribute('data-id') == pId);
+          const pId = c.getAttribute('data-id');
+          const vItem = document.querySelector(`.v-prod-item[data-id="${pId}"]`);
+          if (vItem) c.classList.toggle('selected', vItem.classList.contains('active'));
         });
         updateSummary();
       }
@@ -284,6 +311,8 @@
   });
 
   function syncVisualProducts(selectedId) {
+    // If selecting from a top card, maybe we want to select ONLY that one? Or toggle it?
+    // Let's assume clicking top card selects ONLY that one for simplicity.
     visualItems.forEach(v => {
       v.classList.toggle('active', v.getAttribute('data-id') == selectedId);
     });
@@ -296,7 +325,10 @@
       card.classList.add('selected');
       const id = card.getAttribute('data-id');
       if (productSelect) {
-        productSelect.value = id;
+        const options = productSelect.options;
+        for (let i = 0; i < options.length; i++) {
+          options[i].selected = (options[i].value == id);
+        }
         syncVisualProducts(id);
         updateSummary();
       }
@@ -309,11 +341,13 @@
 
   if (productSelect) {
     productSelect.addEventListener('change', () => {
-      const selectedId = productSelect.value;
+      const selectedIds = Array.from(productSelect.selectedOptions).map(o => o.value);
       productCards.forEach(c => {
-        c.classList.toggle('selected', c.getAttribute('data-id') == selectedId);
+        c.classList.toggle('selected', selectedIds.includes(c.getAttribute('data-id')));
       });
-      syncVisualProducts(selectedId);
+      visualItems.forEach(v => {
+        v.classList.toggle('active', selectedIds.includes(v.getAttribute('data-id')));
+      });
       updateSummary();
     });
   }
