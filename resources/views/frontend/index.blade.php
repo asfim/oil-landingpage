@@ -184,19 +184,40 @@
             <input type="text" name="address" id="address" placeholder="বাসা/রোড, থানা, জেলা" required>
             <div class="field-msg">ঠিকানা লিখুন</div>
           </div>
-          <div class="field-row">
-            <div class="field" id="f-product">
-              <label for="productSelect">প্রোডাক্ট বাছাই করুন</label>
-              <select name="product_id" id="productSelect">
-                @foreach($products as $p)
-                  <option value="{{ $p->id }}" data-price="{{ $p->price }}">{{ $p->name }} — ৳{{ number_format($p->price, 0) }}</option>
-                @endforeach
-              </select>
+          <div class="field" id="f-product">
+            <label>প্রোডাক্ট বাছাই করুন</label>
+            <select name="product_id" id="productSelect" style="display:none;">
+              @foreach($products as $p)
+                <option value="{{ $p->id }}" data-price="{{ $p->price }}">{{ $p->name }} — ৳{{ number_format($p->price, 0) }}</option>
+              @endforeach
+            </select>
+            
+            <div class="visual-product-list" id="visualProductList">
+              @foreach($products as $p)
+                <div class="v-prod-item {{ $loop->first ? 'active' : '' }}" data-id="{{ $p->id }}">
+                  <div class="v-prod-img">
+                    <img src="{{ asset($p->img) }}" alt="{{ $p->name }}">
+                  </div>
+                  <div class="v-prod-info">
+                    <div class="v-prod-name">{{ $p->name }}</div>
+                    <div class="v-prod-price">
+                      <span class="now">৳ {{ number_format($p->price, 0) }}</span>
+                      @if($p->old_price)
+                        <span class="old">৳ {{ number_format($p->old_price, 0) }}</span>
+                      @endif
+                    </div>
+                  </div>
+                  <div class="v-prod-check">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </div>
+              @endforeach
             </div>
-            <div class="field" id="f-qty">
-              <label for="qty">পরিমাণ</label>
-              <input type="number" name="quantity" id="qty" value="1" min="1" max="10">
-            </div>
+          </div>
+
+          <div class="field" id="f-qty">
+            <label for="qty">পরিমাণ</label>
+            <input type="number" name="quantity" id="qty" value="1" min="1" max="10">
           </div>
 
           <div class="order-summary">
@@ -246,6 +267,28 @@
     sumTotal.textContent = fmt(total);
   }
 
+  const visualItems = document.querySelectorAll('.v-prod-item');
+  visualItems.forEach(item => {
+    item.addEventListener('click', () => {
+      visualItems.forEach(v => v.classList.remove('active'));
+      item.classList.add('active');
+      const pId = item.getAttribute('data-id');
+      if (productSelect) {
+        productSelect.value = pId;
+        productCards.forEach(c => {
+          c.classList.toggle('selected', c.getAttribute('data-id') == pId);
+        });
+        updateSummary();
+      }
+    });
+  });
+
+  function syncVisualProducts(selectedId) {
+    visualItems.forEach(v => {
+      v.classList.toggle('active', v.getAttribute('data-id') == selectedId);
+    });
+  }
+
   /* Card Click Handler */
   productCards.forEach(card => {
     card.addEventListener('click', (e) => {
@@ -254,6 +297,7 @@
       const id = card.getAttribute('data-id');
       if (productSelect) {
         productSelect.value = id;
+        syncVisualProducts(id);
         updateSummary();
       }
       const orderSec = document.getElementById('order');
@@ -267,12 +311,9 @@
     productSelect.addEventListener('change', () => {
       const selectedId = productSelect.value;
       productCards.forEach(c => {
-        if (c.getAttribute('data-id') == selectedId) {
-          c.classList.add('selected');
-        } else {
-          c.classList.remove('selected');
-        }
+        c.classList.toggle('selected', c.getAttribute('data-id') == selectedId);
       });
+      syncVisualProducts(selectedId);
       updateSummary();
     });
   }
