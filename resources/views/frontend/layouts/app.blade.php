@@ -308,19 +308,14 @@
       border-radius: 22px;
       padding: 24px 22px;
       cursor: pointer;
-      box-shadow: 0 12px 35px rgba(18, 55, 30, 0.05);
+      box-shadow: 0 10px 30px rgba(18, 55, 30, 0.04);
       transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
       overflow: hidden;
     }
     .product-offer-card:hover {
       transform: translateY(-6px);
       border-color: var(--ion);
-      box-shadow: 0 20px 45px rgba(18, 55, 30, 0.12), 0 0 25px rgba(16,185,129,0.1);
-    }
-    .product-offer-card.selected {
-      border-color: var(--ion);
-      background: #FFFFFF;
-      box-shadow: 0 0 0 2px var(--ion), 0 18px 42px rgba(18, 75, 40, 0.15);
+      box-shadow: 0 18px 40px rgba(18, 55, 30, 0.1), 0 0 20px rgba(16,185,129,0.08);
     }
 
     .offer-top-badge {
