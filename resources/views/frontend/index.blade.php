@@ -113,40 +113,6 @@
   </div>
 </section>
 
-<!-- ============ FEATURED ============ -->
-<section id="featured" class="section-pad">
-  <div class="wrap">
-    <div class="featured-wrap reveal">
-      <div class="featured-visual">
-        <svg class="picon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="gWatch" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF6B4A"/><stop offset="1" stop-color="#7A2A17"/></linearGradient></defs>
-          <rect x="60" y="30" width="80" height="24" rx="8" fill="#3A2318"/>
-          <rect x="60" y="146" width="80" height="24" rx="8" fill="#3A2318"/>
-          <rect x="46" y="54" width="108" height="92" rx="26" fill="url(#gWatch)"/>
-          <rect x="62" y="70" width="76" height="60" rx="14" fill="#0A0D13"/>
-          <circle cx="100" cy="100" r="20" fill="none" stroke="#FF6B4A" stroke-width="3"/>
-          <path d="M100 88v12l8 8" stroke="#FF6B4A" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="featured-copy">
-        <div class="eyebrow">ফিচারড প্রোডাক্ট</div>
-        <h3>Nova Watch — আপনার হেলথ, সবসময় হাতের কাছে</h3>
-        <p class="desc">হার্ট রেট, SpO2 আর স্লিপ ট্র্যাকিং — একটাই স্ক্রিনে। ৭ দিনের ব্যাটারি ব্যাকআপ দিয়ে সারা সপ্তাহ চিন্তামুক্ত থাকুন।</p>
-        <ul class="featured-benefits">
-          <li>রিয়েল-টাইম হার্ট রেট ও SpO2 মনিটরিং</li>
-          <li>৭ দিন পর্যন্ত ব্যাটারি ব্যাকআপ</li>
-          <li>IP68 ওয়াটার রেজিস্ট্যান্ট</li>
-          <li>কল ও নোটিফিকেশন সাপোর্ট</li>
-        </ul>
-        <div class="featured-price">
-          <span class="now">৳4,299</span>
-          <span class="old">৳6,500</span>
-        </div>
-        <a href="#order" class="btn btn-primary" data-select-product="{{ $products->first()->id ?? '' }}">Get Yours Today</a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ============ VIDEO ============ -->
 <section id="video" class="section-pad">
