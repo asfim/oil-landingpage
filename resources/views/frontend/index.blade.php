@@ -64,46 +64,42 @@
       @foreach($products as $index => $p)
         <div class="product-offer-card reveal reveal-delay-{{ ($index % 3) + 1 }} {{ $loop->first ? 'selected' : '' }}" data-id="{{ $p->id }}" data-price="{{ $p->price }}">
           <div class="offer-top-badge">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            <span>ফ্রি ডেলিভারি</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <span>ফ্রি হোম ডেলিভারি</span>
           </div>
+          
           <div class="offer-card-inner">
-            <div class="offer-radio">
-              <div class="radio-dot"></div>
-            </div>
             <div class="offer-img-box">
+              <div class="offer-img-glow"></div>
               <img src="{{ asset($p->img) }}" alt="{{ $p->name }}">
             </div>
+            
             <div class="offer-details">
-              <h3 class="offer-title">{{ $p->name }}</h3>
-              <div class="offer-leaf-divider">
-                <span class="line"></span>
-                <span class="leaf">🌿</span>
-                <span class="line"></span>
+              <div class="offer-rating-row">
+                <span class="stars">★★★★★</span>
+                <span class="score">৪.৯ (১২০+ রিভিউ)</span>
               </div>
+              <h3 class="offer-title">{{ $p->name }}</h3>
+              <p class="offer-subdesc">১০০% প্রাকৃতিক ভেষজ নির্যাস — ১০০ml বিশুদ্ধ তেল</p>
+
               <div class="offer-price-stack">
                 @if($p->old_price)
                 <div class="price-row reg-price">
-                  <span class="icon">🏷️</span>
                   <span class="label">রেগুলার মূল্য:</span>
                   <span class="old-val">৳ {{ number_format($p->old_price, 0) }}</span>
                 </div>
                 @endif
                 <div class="price-row offer-price">
-                  <span class="icon">🏷️</span>
                   <span class="label">অফার মূল্য:</span>
                   <span class="new-val">৳ {{ number_format($p->price, 0) }}</span>
                 </div>
               </div>
-              <div class="offer-tags-row">
-                <span class="tag-badge orange-tag">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                  সীমিত সময়ের অফার
-                </span>
-                <span class="tag-badge green-tag">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                  ফ্রি হোম ডেলিভারি
-                </span>
+
+              <div class="offer-card-action">
+                <button type="button" class="btn-card-select">
+                  <span>অর্ডার করুন</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -252,13 +248,17 @@
 
   /* Card Click Handler */
   productCards.forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
       productCards.forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       const id = card.getAttribute('data-id');
       if (productSelect) {
         productSelect.value = id;
         updateSummary();
+      }
+      const orderSec = document.getElementById('order');
+      if (orderSec && e.target.closest('.btn-card-select')) {
+        orderSec.scrollIntoView({ behavior: 'smooth' });
       }
     });
   });
@@ -404,11 +404,10 @@
     });
   }
 
-  /* ============ APPLE-STYLE SCROLL FRAME ANIMATION ============ */
+  /* ============ APPLE-STYLE PROGRESSIVE SCROLL ANIMATION ============ */
   (function initScrollFrameAnimation() {
     const totalFrames = 240;
-    const frameImages = [];
-    let loadedCount = 0;
+    const frameImages = new Array(totalFrames);
     let targetFrameIndex = 0;
     let currentFrameIndex = 0;
     let lastDrawnFrame = -1;
@@ -419,31 +418,58 @@
     const heroSection = document.getElementById('heroScrollSection');
     const essenceAura = document.getElementById('essenceAura');
 
-    // Preload all 240 transparent WebP frames with smart environment path fallback
-    for (let i = 1; i <= totalFrames; i++) {
-      const img = new Image();
-      const frameNum = String(i).padStart(3, '0');
-      
-      img.onload = () => {
-        loadedCount++;
-        if (i === 1) {
-          drawFrame(0);
-        }
-      };
+    // Base URL resolver for XAMPP / artisan serve / live domain
+    const getFrameUrl = (index) => {
+      const num = String(index + 1).padStart(3, '0');
+      const bladeAsset = "{{ asset('jotno-frames') }}";
+      return `${bladeAsset}/ezgif-frame-${num}.webp`;
+    };
 
+    // Helper to load a single frame
+    function loadFrame(index, callback) {
+      if (frameImages[index]) return;
+      const img = new Image();
+      img.onload = () => {
+        frameImages[index] = img;
+        if (callback) callback(img);
+      };
       img.onerror = () => {
         if (!img.dataset.retried) {
           img.dataset.retried = 'true';
+          const num = String(index + 1).padStart(3, '0');
           const pathName = window.location.pathname.replace(/\/+$/, '');
-          img.src = `${pathName}/jotno-frames/ezgif-frame-${frameNum}.webp`;
+          img.src = `${pathName}/jotno-frames/ezgif-frame-${num}.webp`;
         }
       };
-
-      img.src = `{{ asset('jotno-frames/ezgif-frame-') }}${frameNum}.webp`;
-      frameImages.push(img);
+      img.src = getFrameUrl(index);
     }
 
-    // Scroll progress mapping (0.0 to 1.0)
+    // PHASE 1: Load Frame 0 (First Frame) Instantly (< 20ms!)
+    loadFrame(0, () => {
+      drawFrame(0);
+    });
+
+    // PHASE 2: Load Keyframes every 4th frame (60 frames total) for fast smooth scroll coverage
+    const keyStep = 4;
+    for (let i = 0; i < totalFrames; i += keyStep) {
+      loadFrame(i);
+    }
+
+    // PHASE 3: Background fill of intermediate frames during idle time
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        for (let i = 0; i < totalFrames; i++) {
+          if (!frameImages[i]) loadFrame(i);
+        }
+      });
+    } else {
+      setTimeout(() => {
+        for (let i = 0; i < totalFrames; i++) {
+          if (!frameImages[i]) loadFrame(i);
+        }
+      }, 300);
+    }
+
     function getScrollProgress() {
       if (!heroSection) return 0;
       const rect = heroSection.getBoundingClientRect();
@@ -454,11 +480,10 @@
       return Math.min(Math.max(scrolled / scrollableHeight, 0), 1);
     }
 
-    // Draw frame to canvas with retina support and aspect ratio fit (contain)
     function drawFrame(index) {
       let img = frameImages[index];
 
-      // Fallback to nearest loaded frame if current frame is not ready
+      // Fallback to nearest loaded frame for instant display
       if (!img || !img.complete || img.naturalWidth === 0) {
         for (let offset = 1; offset < totalFrames; offset++) {
           const prev = frameImages[Math.max(0, index - offset)];
@@ -505,15 +530,13 @@
       ctx.restore();
     }
 
-    // Smooth render loop using requestAnimationFrame & Lerp
     function renderLoop() {
       const progress = getScrollProgress();
       targetFrameIndex = progress * (totalFrames - 1);
 
-      // Lerp interpolation (0.12 factor)
       const delta = targetFrameIndex - currentFrameIndex;
       if (Math.abs(delta) > 0.001) {
-        currentFrameIndex += delta * 0.12;
+        currentFrameIndex += delta * 0.15;
       } else {
         currentFrameIndex = targetFrameIndex;
       }
@@ -528,7 +551,6 @@
         lastDrawnFrame = frameToDraw;
       }
 
-      // Smooth visual aura effect based on scroll progress
       if (essenceAura) {
         essenceAura.style.opacity = progress * 0.9;
         essenceAura.style.transform = `translateX(-50%) translateY(${-20 * progress}px) scale(${1 + 0.25 * progress})`;
@@ -537,7 +559,6 @@
       requestAnimationFrame(renderLoop);
     }
 
-    // Start loop
     requestAnimationFrame(renderLoop);
 
     window.addEventListener('resize', () => {
