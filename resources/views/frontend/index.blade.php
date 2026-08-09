@@ -453,20 +453,27 @@
     const heroSection = document.getElementById('heroScrollSection');
     const essenceAura = document.getElementById('essenceAura');
 
-    // Preload all 240 frames automatically
+    // Preload all 240 user transparent frames (.webp) with smart environment path fallback
     for (let i = 1; i <= totalFrames; i++) {
       const img = new Image();
       const frameNum = String(i).padStart(3, '0');
-      img.src = `{{ asset('jotno-frames/ezgif-frame-') }}${frameNum}.jpg`;
-
+      
       img.onload = () => {
         loadedCount++;
-        // Render first frame immediately once available
-        if (i === 1 && Math.round(currentFrameIndex) === 0) {
+        if (i === 1) {
           drawFrame(0);
         }
       };
 
+      img.onerror = () => {
+        if (!img.dataset.retried) {
+          img.dataset.retried = 'true';
+          const pathName = window.location.pathname.replace(/\/+$/, '');
+          img.src = `${pathName}/jotno-frames/ezgif-frame-${frameNum}.webp`;
+        }
+      };
+
+      img.src = `{{ asset('jotno-frames/ezgif-frame-') }}${frameNum}.webp`;
       frameImages.push(img);
     }
 
