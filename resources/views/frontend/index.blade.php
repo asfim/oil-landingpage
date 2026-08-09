@@ -453,7 +453,7 @@
     const heroSection = document.getElementById('heroScrollSection');
     const essenceAura = document.getElementById('essenceAura');
 
-    // Preload all 240 user transparent frames (.webp) with smart environment path fallback
+    // Preload all 240 user transparent PNG frames directly
     for (let i = 1; i <= totalFrames; i++) {
       const img = new Image();
       const frameNum = String(i).padStart(3, '0');
@@ -469,11 +469,11 @@
         if (!img.dataset.retried) {
           img.dataset.retried = 'true';
           const pathName = window.location.pathname.replace(/\/+$/, '');
-          img.src = `${pathName}/jotno-frames/ezgif-frame-${frameNum}.webp`;
+          img.src = `${pathName}/jotno-frames/ezgif-frame-${frameNum}.png`;
         }
       };
 
-      img.src = `{{ asset('jotno-frames/ezgif-frame-') }}${frameNum}.webp`;
+      img.src = `{{ asset('jotno-frames/ezgif-frame-') }}${frameNum}.png`;
       frameImages.push(img);
     }
 
