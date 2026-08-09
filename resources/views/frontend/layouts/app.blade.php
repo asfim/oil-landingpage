@@ -309,13 +309,12 @@
       padding: 24px 22px;
       cursor: pointer;
       box-shadow: 0 10px 30px rgba(18, 55, 30, 0.04);
-      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
       overflow: hidden;
     }
     .product-offer-card:hover {
       transform: translateY(-6px);
-      border-color: var(--ion);
-      box-shadow: 0 18px 40px rgba(18, 55, 30, 0.1), 0 0 20px rgba(16,185,129,0.08);
+      box-shadow: 0 18px 40px rgba(18, 55, 30, 0.08);
     }
 
     .offer-top-badge {
