@@ -141,6 +141,7 @@
     <div class="why-grid" id="whyGrid">
       @foreach($whyItems as $index => $w)
         <div class="why-card reveal reveal-delay-{{ ($index % 3) + 1 }}">
+          <div class="why-card-num">0{{ $index + 1 }}</div>
           <div class="why-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">{!! $w['icon'] !!}</svg>
           </div>

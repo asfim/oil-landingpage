@@ -545,20 +545,61 @@
     .video-play:hover .play-btn { transform: scale(1.08); box-shadow: 0 20px 50px rgba(18,75,40,0.4), 0 0 0 14px rgba(255,255,255,0.35); }
     .play-btn svg { width: 26px; height: 26px; margin-left: 4px; fill: var(--ion); }
 
-    /* ============ WHY CHOOSE ============ */
-    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    /* ============ WHY CHOOSE (LUXURY MODERN DESIGN) ============ */
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
     @media(max-width:900px) { .why-grid { grid-template-columns: repeat(2, 1fr); } }
     @media(max-width:560px) { .why-grid { grid-template-columns: 1fr; } }
+    
     .why-card {
-      background: #FFFFFF; border: 1px solid var(--stroke); border-radius: var(--radius-md);
-      padding: 26px; transition: transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
-      box-shadow: 0 10px 30px rgba(18,55,30,0.04);
+      position: relative;
+      background: linear-gradient(145deg, #FFFFFF 0%, #F8FAF9 100%);
+      border: 1px solid rgba(18, 55, 30, 0.08);
+      border-radius: 24px;
+      padding: 32px 28px;
+      transition: transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+      box-shadow: 0 12px 35px rgba(18, 55, 30, 0.04);
+      overflow: hidden;
     }
-    .why-card:hover { transform: translateY(-6px); border-color: var(--ion); box-shadow: 0 18px 40px rgba(18,55,30,0.1); }
-    .why-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--ion-soft); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-    .why-icon svg { width: 22px; height: 22px; stroke: var(--ion); }
-    .why-card h4 { font-size: 17px; color: #0B1910; }
-    .why-card p { color: var(--text-muted); font-size: 14px; margin-top: 8px; }
+    .why-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(18, 75, 40, 0.2);
+      box-shadow: 0 22px 50px rgba(18, 55, 30, 0.09);
+    }
+    .why-card-num {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      font-family: var(--font-mono);
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--ion);
+      opacity: 0.12;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+    .why-card:hover .why-card-num {
+      opacity: 0.25;
+      transform: scale(1.1);
+    }
+    .why-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(18,75,40,0.12), rgba(16,185,129,0.18));
+      border: 1px solid rgba(18,75,40,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(18, 75, 40, 0.08);
+      transition: transform 0.3s var(--ease);
+    }
+    .why-card:hover .why-icon {
+      transform: scale(1.08) rotate(4deg);
+    }
+    .why-icon svg { width: 26px; height: 26px; stroke: var(--ion); }
+    .why-card h4 { font-size: 19px; font-weight: 800; color: #0B1910; line-height: 1.3; }
+    .why-card p { color: var(--text-muted); font-size: 14.5px; line-height: 1.55; margin-top: 10px; }
 
     /* ============ ORDER ============ */
     .order-wrap {
