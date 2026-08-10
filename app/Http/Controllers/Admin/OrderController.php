@@ -12,17 +12,29 @@ class OrderController extends Controller
     {
         $query = Order::latest();
 
-        // Repeat / Popular customer phones (where phone appears > 1 times)
-        $repeatPhones = Order::select('phone')
-            ->groupBy('phone')
-            ->havingRaw('COUNT(id) > 1')
-            ->pluck('phone');
-        
-        $repeatCount = $repeatPhones->count();
+        // Detect repeat customers by normalizing phone numbers (last 9 digits)
+        $allOrders = Order::select('id', 'phone')->get();
+        $phoneGroups = [];
+        foreach ($allOrders as $ord) {
+            $digits = preg_replace('/\D/', '', $ord->phone);
+            $key = strlen($digits) >= 9 ? substr($digits, -9) : $digits;
+            if ($key) {
+                $phoneGroups[$key][] = $ord->id;
+            }
+        }
+
+        $repeatOrderIds = [];
+        foreach ($phoneGroups as $ids) {
+            if (count($ids) > 1) {
+                $repeatOrderIds = array_merge($repeatOrderIds, $ids);
+            }
+        }
+
+        $repeatCount = count($repeatOrderIds);
 
         // Filtering logic
         if ($request->get('filter') === 'repeat') {
-            $query->whereIn('phone', $repeatPhones);
+            $query->whereIn('id', $repeatOrderIds);
         } elseif ($request->has('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
         }
