@@ -17,6 +17,7 @@ class Order extends Model
         'delivery_charge',
         'total_amount',
         'status',
+        'note',
     ];
 
     protected function casts(): array
@@ -32,5 +33,10 @@ class Order extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

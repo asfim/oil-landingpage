@@ -1,0 +1,302 @@
+@extends('admin.layouts.app')
+
+@section('title', 'Website Settings')
+
+@section('content')
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3">
+        <h6 class="mb-0 fw-bold fs-5">Website Settings</h6>
+    </div>
+    <div class="card-body">
+        <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            <!-- Nav Tabs -->
+            <ul class="nav nav-tabs mb-4" id="settingTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general-panel" type="button" role="tab" aria-controls="general-panel" aria-selected="true">
+                        <i class="bi bi-sliders me-1"></i> General & Shipping
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero-panel" type="button" role="tab" aria-controls="hero-panel" aria-selected="false">
+                        <i class="bi bi-window me-1"></i> Hero Section
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="why-tab" data-bs-toggle="tab" data-bs-target="#why-panel" type="button" role="tab" aria-controls="why-panel" aria-selected="false">
+                        <i class="bi bi-star me-1"></i> Why Choose Us
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout-panel" type="button" role="tab" aria-controls="checkout-panel" aria-selected="false">
+                        <i class="bi bi-cart-check me-1"></i> Checkout Section
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="video-tab" data-bs-toggle="tab" data-bs-target="#video-panel" type="button" role="tab" aria-controls="video-panel" aria-selected="false">
+                        <i class="bi bi-play-circle me-1"></i> Video Section
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="branding-tab" data-bs-toggle="tab" data-bs-target="#branding-panel" type="button" role="tab" aria-controls="branding-panel" aria-selected="false">
+                        <i class="bi bi-image me-1"></i> Branding & Media
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="settingTabsContent">
+                <!-- 1. General & Shipping Settings -->
+                <div class="tab-pane fade show active" id="general-panel" role="tabpanel" aria-labelledby="general-tab">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Website Brand Name</label>
+                            <input type="text" name="site_name" class="form-control" value="{{ $settings['site_name'] ?? 'NOVA' }}" placeholder="e.g. NOVA">
+                            <small class="text-muted">Displays in header logo and footer.</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Website Page Title Tag</label>
+                            <input type="text" name="site_title" class="form-control" value="{{ $settings['site_title'] ?? 'NOVA — Power your everyday' }}" placeholder="e.g. NOVA — Power your everyday">
+                            <small class="text-muted">Displays in browser tab title.</small>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-semibold">Meta Description (SEO)</label>
+                            <textarea name="site_description" class="form-control" rows="2">{{ $settings['site_description'] ?? 'NOVA প্রিমিয়াম টেক ও ভেষজ প্রোডাক্টস — ক্যাশ অন ডেলিভারি সহ দ্রুত ডেলিভারি।' }}</textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Delivery Charge (৳)</label>
+                            <input type="number" step="0.01" name="delivery_charge" class="form-control" value="{{ $settings['delivery_charge'] ?? '60' }}" required>
+                            <small class="text-muted">Flat delivery charge applied to every order.</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Contact Phone Number</label>
+                            <input type="text" name="contact_phone" class="form-control" value="{{ $settings['contact_phone'] ?? '' }}" placeholder="e.g. +8801700000000">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">WhatsApp Number</label>
+                            <input type="text" name="whatsapp_number" class="form-control" value="{{ $settings['whatsapp_number'] ?? '' }}" placeholder="e.g. 8801700000000">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Support Email</label>
+                            <input type="email" name="contact_email" class="form-control" value="{{ $settings['contact_email'] ?? '' }}" placeholder="info@example.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Hero Section Settings -->
+                <div class="tab-pane fade" id="hero-panel" role="tabpanel" aria-labelledby="hero-tab">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Hero Eyebrow Tag</label>
+                            <input type="text" name="hero_eyebrow" class="form-control" value="{{ $settings['hero_eyebrow'] ?? 'নতুন কালেকশন — ৪টি প্রোডাক্ট' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Hero Rating Text</label>
+                            <input type="text" name="hero_rating" class="form-control" value="{{ $settings['hero_rating'] ?? '৪.৮/৫' }}">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-semibold">Hero Title</label>
+                            <input type="text" name="hero_title" class="form-control" value="{{ $settings['hero_title'] ?? 'আপনার প্রতিদিনকে <em>পাওয়ার আপ</em> করুন' }}">
+                            <small class="text-muted">HTML tags like &lt;em&gt; are allowed for text styling.</small>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-semibold">Hero Description</label>
+                            <textarea name="hero_description" class="form-control" rows="3">{{ $settings['hero_description'] ?? 'প্রিমিয়াম সাউন্ড, স্মার্ট ট্র্যাকিং আর সারাদিনের চার্জ — একসাথে, একটাই ব্র্যান্ডে।' }}</textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Order Button Text</label>
+                            <input type="text" name="hero_btn_text" class="form-control" value="{{ $settings['hero_btn_text'] ?? 'Order Now' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Why Choose Us Section Settings -->
+                <div class="tab-pane fade" id="why-panel" role="tabpanel" aria-labelledby="why-tab">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Why Choose Us Eyebrow Tag</label>
+                            <input type="text" name="why_eyebrow" class="form-control" value="{{ $settings['why_eyebrow'] ?? 'কেন NOVA' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Why Choose Us Section Title</label>
+                            <input type="text" name="why_title" class="form-control" value="{{ $settings['why_title'] ?? 'যে কারণে গ্রাহকরা আমাদের বেছে নেন' }}">
+                        </div>
+                        <div class="col-md-12">
+                            <div class="alert alert-info d-flex align-items-center mb-0">
+                                <i class="bi bi-info-circle fs-4 me-3"></i>
+                                <div>
+                                    To add, edit or manage individual feature cards under this section, visit the 
+                                    <a href="{{ route('admin.why-choose.index') }}" class="fw-bold text-decoration-underline ms-1">Why Choose Us Items Manager</a>.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Checkout Section Settings -->
+                <div class="tab-pane fade" id="checkout-panel" role="tabpanel" aria-labelledby="checkout-tab">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Checkout Eyebrow Tag</label>
+                            <input type="text" name="checkout_eyebrow" class="form-control" value="{{ $settings['checkout_eyebrow'] ?? 'চেকআউট' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Checkout Title</label>
+                            <input type="text" name="checkout_title" class="form-control" value="{{ $settings['checkout_title'] ?? 'আপনার অর্ডার কনফার্ম করুন' }}">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-semibold">Checkout Subtitle / Description</label>
+                            <textarea name="checkout_description" class="form-control" rows="2">{{ $settings['checkout_description'] ?? 'ফর্মটি পূরণ করুন, আমাদের টিম ফোনে কনফার্ম করে ২৪-৪৮ ঘণ্টার মধ্যে ডেলিভারি করবে।' }}</textarea>
+                        </div>
+
+                        <div class="col-md-12 mb-2"><h6 class="fw-bold text-primary">Trust Perks (3 Feature Bullets)</h6></div>
+
+                        <!-- Perk 1 -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Perk 1 Title</label>
+                            <input type="text" name="perk_1_title" class="form-control" value="{{ $settings['perk_1_title'] ?? 'ক্যাশ অন ডেলিভারি' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Perk 1 Description</label>
+                            <input type="text" name="perk_1_desc" class="form-control" value="{{ $settings['perk_1_desc'] ?? 'পণ্য হাতে পেয়ে টাকা দিন' }}">
+                        </div>
+
+                        <!-- Perk 2 -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Perk 2 Title</label>
+                            <input type="text" name="perk_2_title" class="form-control" value="{{ $settings['perk_2_title'] ?? 'সীমিত স্টক' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Perk 2 Description</label>
+                            <input type="text" name="perk_2_desc" class="form-control" value="{{ $settings['perk_2_desc'] ?? 'বর্তমান অফার সীমিত সময়ের জন্য' }}">
+                        </div>
+
+                        <!-- Perk 3 -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Perk 3 Title</label>
+                            <input type="text" name="perk_3_title" class="form-control" value="{{ $settings['perk_3_title'] ?? 'সহজ রিটার্ন' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Perk 3 Description</label>
+                            <input type="text" name="perk_3_desc" class="form-control" value="{{ $settings['perk_3_desc'] ?? '৭ দিনের এক্সচেঞ্জ সুবিধা' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Video Section Settings -->
+                <div class="tab-pane fade" id="video-panel" role="tabpanel" aria-labelledby="video-tab">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Video Eyebrow Tag</label>
+                            <input type="text" name="video_eyebrow" class="form-control" value="{{ $settings['video_eyebrow'] ?? 'লাইভ ডেমো' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Video Section Title</label>
+                            <input type="text" name="video_title" class="form-control" value="{{ $settings['video_title'] ?? 'See It In Action' }}">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-semibold">Video Section Description</label>
+                            <textarea name="video_description" class="form-control" rows="2">{{ $settings['video_description'] ?? 'প্রোডাক্টগুলো বাস্তবে কেমন পারফর্ম করে, নিজের চোখে দেখুন।' }}</textarea>
+                        </div>
+
+                        <!-- Direct Video File Upload & External URL -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Upload Direct Video File (MP4, WebM, MOV)</label>
+                            <input type="file" name="video_file" class="form-control" accept="video/mp4,video/webm,video/quicktime,video/mov">
+                            <small class="text-muted d-block mt-1">Upload video file directly to server (Max 100MB).</small>
+                            @if(!empty($settings['video_url']))
+                                <div class="mt-2 text-success small">
+                                    <i class="bi bi-check-circle me-1"></i> Current Video Path / URL: <code>{{ $settings['video_url'] }}</code>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Or External Video URL (.mp4)</label>
+                            <input type="text" name="video_url" class="form-control" value="{{ $settings['video_url'] ?? '' }}" placeholder="https://example.com/video.mp4">
+                            <small class="text-muted d-block mt-1">Enter direct MP4 link if video is hosted on CDN/external site.</small>
+                        </div>
+
+                        <!-- Thumbnail / Poster Image -->
+                        <div class="col-md-12 mb-3">
+                            <hr class="my-3">
+                            <label class="form-label fw-semibold">Thumbnail / Poster Image (Optional)</label>
+                            <input type="file" name="poster_file" class="form-control" accept="image/*">
+                            <small class="text-muted d-block mt-1">
+                                <i class="bi bi-info-circle me-1"></i> 
+                                Thumbnail image optional. If no custom thumbnail is uploaded, the 1st frame of the video will automatically display as the thumbnail.
+                            </small>
+
+                            @if(!empty($settings['video_poster']))
+                                <div class="mt-3 p-3 bg-light rounded border d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="{{ Str::startsWith($settings['video_poster'], ['http://', 'https://']) ? $settings['video_poster'] : asset($settings['video_poster']) }}" alt="Poster" style="max-height:70px; border-radius:4px;" class="border p-1 bg-white">
+                                        <div>
+                                            <strong class="d-block text-dark">Custom Thumbnail Active</strong>
+                                            <small class="text-muted">Will display on website instead of video 1st frame.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-check form-switch me-2">
+                                        <input class="form-check-input" type="checkbox" name="remove_poster" value="1" id="removePoster">
+                                        <label class="form-check-label text-danger fw-semibold" for="removePoster">Remove Thumbnail (Use 1st Frame)</label>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Branding & Media Settings -->
+                <div class="tab-pane fade" id="branding-panel" role="tabpanel" aria-labelledby="branding-tab">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Site Logo Image</label>
+                            <input type="file" name="logo_file" class="form-control" accept="image/*">
+                            <small class="text-muted d-block mt-1">Upload PNG, JPG, SVG, or WEBP logo image for navbar & footer.</small>
+                            @if(!empty($settings['site_logo']))
+                                <div class="mt-3 p-3 bg-light rounded border d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="{{ Str::startsWith($settings['site_logo'], ['http://', 'https://']) ? $settings['site_logo'] : asset($settings['site_logo']) }}" alt="Logo" style="max-height:50px;" class="border p-1 bg-white rounded">
+                                        <div>
+                                            <strong class="d-block text-dark">Current Logo Active</strong>
+                                            <small class="text-muted">Displays in header & footer.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-check form-switch me-2">
+                                        <input class="form-check-input" type="checkbox" name="remove_logo" value="1" id="removeLogo">
+                                        <label class="form-check-label text-danger fw-semibold" for="removeLogo">Remove Logo</label>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Site Favicon Image</label>
+                            <input type="file" name="favicon_file" class="form-control" accept="image/*,.ico">
+                            <small class="text-muted d-block mt-1">Upload 32x32 ICO, PNG, or SVG favicon image for browser tab.</small>
+                            @if(!empty($settings['site_favicon']))
+                                <div class="mt-3 p-3 bg-light rounded border d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="{{ Str::startsWith($settings['site_favicon'], ['http://', 'https://']) ? $settings['site_favicon'] : asset($settings['site_favicon']) }}" alt="Favicon" style="max-height:36px;" class="border p-1 bg-white rounded">
+                                        <div>
+                                            <strong class="d-block text-dark">Current Favicon Active</strong>
+                                            <small class="text-muted">Displays in browser tab.</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-check form-switch me-2">
+                                        <input class="form-check-input" type="checkbox" name="remove_favicon" value="1" id="removeFavicon">
+                                        <label class="form-check-label text-danger fw-semibold" for="removeFavicon">Remove Favicon</label>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+            <button type="submit" class="btn btn-primary px-4 py-2">
+                <i class="bi bi-save me-1"></i> Save Settings
+            </button>
+        </form>
+    </div>
+</div>
+@endsection

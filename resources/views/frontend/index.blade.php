@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('title', 'NOVA — Power your everyday')
+@section('title', $settings['site_title'])
 
 @section('content')
 <!-- ============ HERO ============ -->
@@ -13,16 +13,16 @@
     <div class="hero-bg"></div>
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <div class="eyebrow reveal in">নতুন কালেকশন — ৪টি প্রোডাক্ট</div>
-        <h1 class="reveal in">আপনার প্রতিদিনকে <em>পাওয়ার আপ</em> করুন</h1>
-        <p class="lead reveal in">প্রিমিয়াম সাউন্ড, স্মার্ট ট্র্যাকিং আর সারাদিনের চার্জ — একসাথে, একটাই ব্র্যান্ডে। NOVA-র ৪টি ফ্ল্যাগশিপ প্রোডাক্ট এখন বিশেষ ছাড়ে।</p>
+        <div class="eyebrow reveal in">{{ $settings['hero_eyebrow'] ?? 'নতুন কালেকশন — ৪টি প্রোডাক্ট' }}</div>
+        <h1 class="reveal in">{!! $settings['hero_title'] ?? 'আপনার প্রতিদিনকে <em>পাওয়ার আপ</em> করুন' !!}</h1>
+        <p class="lead reveal in">{{ $settings['hero_description'] ?? 'প্রিমিয়াম সাউন্ড, স্মার্ট ট্র্যাকিং আর সারাদিনের চার্জ — একসাথে, একটাই ব্র্যান্ডে। NOVA-র ৪টি ফ্ল্যাগশিপ প্রোডাক্ট এখন বিশেষ ছাড়ে।' }}</p>
         <div class="hero-ctas reveal in">
-          <a href="#order" class="btn btn-primary">Order Now</a>
+          <a href="#order" class="btn btn-primary">{{ $settings['hero_btn_text'] ?? 'Order Now' }}</a>
           <a href="#products" class="btn btn-ghost">View Products</a>
         </div>
         <div class="hero-trust reveal in">
-          <div><strong>৪.৮/৫</strong>গ্রাহক রেটিং</div>
-          <div><strong>৳60</strong>ফ্ল্যাট ডেলিভারি</div>
+          <div><strong>{{ $settings['hero_rating'] ?? '৪.৮/৫' }}</strong>গ্রাহক রেটিং</div>
+          <div><strong>৳{{ $settings['delivery_charge'] ?? '60' }}</strong>ফ্ল্যাট ডেলিভারি</div>
           <div><strong>COD</strong>ক্যাশ অন ডেলিভারি</div>
         </div>
       </div>
@@ -46,8 +46,17 @@
 
 <div class="benefit-strip">
   <div class="benefit-track">
-    <span>প্রিমিয়াম কোয়ালিটি</span><span>ফাস্ট ডেলিভারি</span><span>ক্যাশ অন ডেলিভারি</span><span>সিকিউর প্যাকেজিং</span><span>বেস্ট প্রাইস</span><span>১ বছর ওয়ারেন্টি</span>
-    <span>প্রিমিয়াম কোয়ালিটি</span><span>ফাস্ট ডেলিভারি</span><span>ক্যাশ অন ডেলিভারি</span><span>সিকিউর প্যাকেজিং</span><span>বেস্ট প্রাইস</span><span>১ বছর ওয়ারেন্টি</span>
+    @if($benefits->count() > 0)
+      @foreach($benefits as $benefit)
+        <span>{{ $benefit->title }}</span>
+      @endforeach
+      @foreach($benefits as $benefit)
+        <span>{{ $benefit->title }}</span>
+      @endforeach
+    @else
+      <span>প্রিমিয়াম কোয়ালিটি</span><span>ফাস্ট ডেলিভারি</span><span>ক্যাশ অন ডেলিভারি</span><span>সিকিউর প্যাকেজিং</span><span>বেস্ট প্রাইস</span><span>১ বছর ওয়ারেন্টি</span>
+      <span>প্রিমিয়াম কোয়ালিটি</span><span>ফাস্ট ডেলিভারি</span><span>ক্যাশ অন ডেলিভারি</span><span>সিকিউর প্যাকেজিং</span><span>বেস্ট প্রাইস</span><span>১ বছর ওয়ারেন্টি</span>
+    @endif
   </div>
 </div>
 
@@ -114,13 +123,27 @@
 <section id="video" class="section-pad">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">লাইভ ডেমো</div>
-      <h2>See It In Action</h2>
-      <p>NOVA প্রোডাক্টগুলো বাস্তবে কেমন পারফর্ম করে, নিজের চোখে দেখুন।</p>
+      <div class="eyebrow">{{ $settings['video_eyebrow'] ?? 'লাইভ ডেমো' }}</div>
+      <h2>{{ $settings['video_title'] ?? 'See It In Action' }}</h2>
+      <p>{{ $settings['video_description'] ?? 'NOVA প্রোডাক্টগুলো বাস্তবে কেমন পারফর্ম করে, নিজের চোখে দেখুন।' }}</p>
     </div>
     <div class="video-card reveal">
-      <video id="novaVideo" poster="" preload="metadata" playsinline controls>
-        <source src="REPLACE_WITH_YOUR_VIDEO_URL.mp4" type="video/mp4">
+      @php
+        $hasPoster = !empty($settings['video_poster']);
+        $posterUrl = $hasPoster ? (\Illuminate\Support\Str::startsWith($settings['video_poster'], ['http://', 'https://']) ? $settings['video_poster'] : asset($settings['video_poster'])) : null;
+        
+        $rawVideoUrl = $settings['video_url'] ?? '';
+        if (!empty($rawVideoUrl)) {
+            $videoSrc = \Illuminate\Support\Str::startsWith($rawVideoUrl, ['http://', 'https://', '/']) ? $rawVideoUrl : asset($rawVideoUrl);
+            $videoSrc = $videoSrc . '#t=0.001';
+        } else {
+            $videoSrc = '';
+        }
+      @endphp
+      <video id="novaVideo" @if($posterUrl) poster="{{ $posterUrl }}" @endif preload="metadata" playsinline controls>
+        @if($videoSrc)
+          <source src="{{ $videoSrc }}" type="video/mp4">
+        @endif
       </video>
       <div class="video-play" id="videoPlayOverlay">
         <button class="play-btn" id="playBtn" aria-label="ভিডিও চালান">
@@ -135,17 +158,23 @@
 <section id="why" class="section-pad">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">কেন NOVA</div>
-      <h2>যে কারণে গ্রাহকরা আমাদের বেছে নেন</h2>
+      <div class="eyebrow">{{ $settings['why_eyebrow'] ?? 'কেন NOVA' }}</div>
+      <h2>{{ $settings['why_title'] ?? 'যে কারণে গ্রাহকরা আমাদের বেছে নেন' }}</h2>
     </div>
     <div class="why-grid" id="whyGrid">
       @foreach($whyItems as $index => $w)
         <div class="why-card reveal reveal-delay-{{ ($index % 3) + 1 }}">
           <div class="why-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">{!! $w['icon'] !!}</svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              @if(Str::contains($w->icon ?? '', ['<path', '<polyline', '<circle', '<rect', '<line']))
+                {!! $w->icon !!}
+              @else
+                <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>
+              @endif
+            </svg>
           </div>
-          <h4>{{ $w['title'] }}</h4>
-          <p>{{ $w['desc'] }}</p>
+          <h4>{{ $w->title }}</h4>
+          <p>{{ $w->description ?? $w->desc ?? '' }}</p>
         </div>
       @endforeach
     </div>
@@ -157,13 +186,22 @@
   <div class="wrap">
     <div class="order-wrap reveal">
       <div class="order-info">
-        <div class="eyebrow">চেকআউট</div>
-        <h3>আপনার অর্ডার কনফার্ম করুন</h3>
-        <p>ফর্মটি পূরণ করুন, আমাদের টিম ফোনে কনফার্ম করে ২৪-৪৮ ঘণ্টার মধ্যে ডেলিভারি করবে।</p>
+        <div class="eyebrow">{{ $settings['checkout_eyebrow'] ?? 'চেকআউট' }}</div>
+        <h3>{{ $settings['checkout_title'] ?? 'আপনার অর্ডার কনফার্ম করুন' }}</h3>
+        <p>{{ $settings['checkout_description'] ?? 'ফর্মটি পূরণ করুন, আমাদের টিম ফোনে কনফার্ম করে ২৪-৪৮ ঘণ্টার মধ্যে ডেলিভারি করবে।' }}</p>
         <div class="order-perks">
-          <div><strong>ক্যাশ অন ডেলিভারি</strong>পণ্য হাতে পেয়ে টাকা দিন</div>
-          <div><strong>সীমিত স্টক</strong>বর্তমান অফার সীমিত সময়ের জন্য</div>
-          <div><strong>সহজ রিটার্ন</strong>৭ দিনের এক্সচেঞ্জ সুবিধা</div>
+          <div>
+            <strong>{{ $settings['perk_1_title'] ?? 'ক্যাশ অন ডেলিভারি' }}</strong>
+            {{ $settings['perk_1_desc'] ?? 'পণ্য হাতে পেয়ে টাকা দিন' }}
+          </div>
+          <div>
+            <strong>{{ $settings['perk_2_title'] ?? 'সীমিত স্টক' }}</strong>
+            {{ $settings['perk_2_desc'] ?? 'বর্তমান অফার সীমিত সময়ের জন্য' }}
+          </div>
+          <div>
+            <strong>{{ $settings['perk_3_title'] ?? 'সহজ রিটার্ন' }}</strong>
+            {{ $settings['perk_3_desc'] ?? '৭ দিনের এক্সচেঞ্জ সুবিধা' }}
+          </div>
         </div>
       </div>
       <div class="order-form" id="orderFormWrap">
@@ -241,7 +279,7 @@
 @push('scripts')
 <script>
   const PRODUCTS_DATA = @json($products);
-  const DELIVERY_CHARGE = 60;
+  const DELIVERY_CHARGE = {{ isset($settings['delivery_charge']) ? $settings['delivery_charge'] : 60 }};
 
   const productCards = document.querySelectorAll('.product-offer-card');
   const productSelect = document.getElementById('productSelect');
@@ -422,6 +460,13 @@
           orderSuccess.classList.add('show');
           if (result.message) {
             orderSuccess.textContent = result.message;
+          }
+          
+          if (typeof fbq === 'function') {
+             fbq('track', 'Purchase', {
+                 value: result.total_amount,
+                 currency: 'BDT'
+             });
           }
         } else {
           alert(result.message || 'অর্ডার করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');

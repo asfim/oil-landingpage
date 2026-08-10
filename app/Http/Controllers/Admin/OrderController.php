@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Illuminate\Http\Request;
+
+class OrderController extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = Order::latest();
+
+        // Repeat / Popular customer phones (where phone appears > 1 times)
+        $repeatPhones = Order::select('phone')
+            ->groupBy('phone')
+            ->havingRaw('COUNT(id) > 1')
+            ->pluck('phone');
+        
+        $repeatCount = $repeatPhones->count();
+
+        // Filtering logic
+        if ($request->get('filter') === 'repeat') {
+            $query->whereIn('phone', $repeatPhones);
+        } elseif ($request->has('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        $orders = $query->paginate(20);
+
+        return view('admin.orders.index', compact('orders', 'repeatCount'));
+    }
+
+    public function show(Order $order)
+    {
+        $order->load(['items.product', 'product']);
+        return view('admin.orders.show', compact('order'));
+    }
+
+    public function edit(Order $order)
+    {
+        return view('admin.orders.edit', compact('order'));
+    }
+
+    public function updateStatus(Request $request, Order $order)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,confirmed,processing,delivered,cancelled',
+        ]);
+
+        $order->update(['status' => $validated['status']]);
+
+        return redirect()->back()->with('success', 'Order #' . $order->id . ' status updated to ' . ucfirst($order->status) . '.');
+    }
+
+    public function update(Request $request, Order $order)
+    {
+        $validated = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:1000',
+            'status' => 'required|in:pending,confirmed,processing,delivered,cancelled',
+            'note' => 'nullable|string'
+        ]);
+
+        $order->update($validated);
+
+        return redirect()->route('admin.orders.show', $order->id)->with('success', 'Order updated successfully.');
+    }
+
+    public function destroy(Order $order)
+    {
+        $order->delete();
+        return redirect()->route('admin.orders.index')->with('success', 'Order deleted successfully.');
+    }
+}

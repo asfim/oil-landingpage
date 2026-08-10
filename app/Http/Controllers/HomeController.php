@@ -13,42 +13,28 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = Product::where('is_active', true)->get();
+        $products = Product::where('is_active', true)->orderBy('sort_order')->get();
+        $whyItems = \App\Models\WhyChooseItem::where('is_active', true)->orderBy('sort_order')->get();
+        $benefits = \App\Models\Benefit::where('is_active', true)->orderBy('sort_order')->get();
+        $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
 
-        $whyItems = [
-            [
-                'title' => 'মানের নিশ্চয়তা',
-                'desc' => 'প্রতিটি প্রোডাক্ট কোয়ালিটি চেক করে পাঠানো হয়।',
-                'icon' => '<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>'
-            ],
-            [
-                'title' => 'ফাস্ট ডেলিভারি',
-                'desc' => 'ঢাকার ভিতরে ২৪-৪৮ ঘণ্টায় ডেলিভারি।',
-                'icon' => '<path d="M3 12h13M13 6l6 6-6 6"/>'
-            ],
-            [
-                'title' => 'সহজ অর্ডার',
-                'desc' => 'মাত্র কয়েকটি ক্লিকে অর্ডার সম্পন্ন করুন।',
-                'icon' => '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>'
-            ],
-            [
-                'title' => 'কাস্টমার সাপোর্ট',
-                'desc' => 'যেকোনো প্রশ্নে আমাদের টিম সবসময় পাশে আছে।',
-                'icon' => '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'
-            ],
-            [
-                'title' => 'নিরাপদ পেমেন্ট',
-                'desc' => 'ক্যাশ অন ডেলিভারি সহ নিরাপদ পেমেন্ট অপশন।',
-                'icon' => '<rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'
-            ],
-            [
-                'title' => 'সিকিউর প্যাকেজিং',
-                'desc' => 'প্রতিটি প্রোডাক্ট নিরাপদে প্যাক করে পাঠানো হয়।',
-                'icon' => '<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/>'
-            ],
-        ];
+        // If whyItems is empty, fallback to default array for robustness if not seeded
+        if ($whyItems->isEmpty()) {
+            $whyItems = collect([
+                (object)[
+                    'title' => 'মানের নিশ্চয়তা',
+                    'description' => 'প্রতিটি প্রোডাক্ট কোয়ালিটি চেক করে পাঠানো হয়।',
+                    'icon' => '<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>'
+                ],
+                (object)[
+                    'title' => 'ফাস্ট ডেলিভারি',
+                    'description' => 'ঢাকার ভিতরে ২৪-৪৮ ঘণ্টায় ডেলিভারি।',
+                    'icon' => '<path d="M3 12h13M13 6l6 6-6 6"/>'
+                ]
+            ]);
+        }
 
-        return view('frontend.index', compact('products', 'whyItems'));
+        return view('frontend.index', compact('products', 'whyItems', 'benefits', 'settings'));
     }
 
     /**
@@ -56,9 +42,14 @@ class HomeController extends Controller
      */
     public function storeOrder(Request $request)
     {
+        // Phone normalization
+        $phone = $request->input('phone', '');
+        $phone = preg_replace('/^(?:\+?88)?(01\d{9})$/', '+88$1', trim($phone));
+        $request->merge(['phone' => $phone]);
+
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
-            'phone' => ['required', 'regex:/^0\d{10}$/'],
+            'phone' => ['required', 'regex:/^\+8801\d{9}$/'],
             'address' => 'required|string|max:1000',
             'product_ids' => 'required|array|min:1',
             'product_ids.*' => 'exists:products,id',
@@ -74,7 +65,8 @@ class HomeController extends Controller
             $productNames[] = $p->name;
         }
 
-        $deliveryCharge = 60.00;
+        $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
+        $deliveryCharge = isset($settings['delivery_charge']) ? (float)$settings['delivery_charge'] : 60.00;
         $totalAmount = ($subtotal * $validated['quantity']) + $deliveryCharge;
 
         $order = Order::create([
@@ -90,11 +82,23 @@ class HomeController extends Controller
             'status' => 'pending',
         ]);
 
+        // Create Order Items
+        foreach ($products as $p) {
+            $order->items()->create([
+                'product_id' => $p->id,
+                'product_name' => $p->name,
+                'product_price' => $p->price,
+                'quantity' => $validated['quantity'], // Master quantity applies to each selected package
+                'subtotal' => $p->price * $validated['quantity'],
+            ]);
+        }
+
         if ($request->wantsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'অর্ডার রিসিভ হয়েছে। আমাদের টিম শীঘ্রই আপনার ফোনে যোগাযোগ করবে।',
                 'order_id' => $order->id,
+                'total_amount' => $totalAmount,
             ]);
         }
 
