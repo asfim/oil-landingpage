@@ -29,9 +29,9 @@
                 </div>
 
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">SVG Icon Path Code (Optional)</label>
+                    <label class="form-label">Icon Class (e.g. bi-star, bi-heart)</label>
                     <input type="text" name="icon" class="form-control" value="{{ $item->icon }}">
-                    <small class="text-muted">Enter SVG inner path elements or leave empty for default shield icon.</small>
+                    <small class="text-muted">Enter a Bootstrap Icon class name or leave empty for default shield icon.</small>
                 </div>
 
                 <div class="col-md-12 mb-3">

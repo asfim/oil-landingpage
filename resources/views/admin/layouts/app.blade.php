@@ -34,7 +34,13 @@
             <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
                 <i class="bi bi-box nav-icon"></i> Products
             </a>
-            <h6 class="mt-4 mb-2 text-uppercase text-muted" style="font-size: 0.8rem; padding-left: 15px;">Landing Page</h6>
+            <a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                <i class="bi bi-graph-up nav-icon"></i> Sales Report
+            </a>
+            <h6 class="mt-4 mb-2 text-uppercase" style="font-size: 0.8rem; padding-left: 15px;">Landing Page</h6>
+            <a href="{{ route('admin.sales-popups.index') }}" class="{{ request()->routeIs('admin.sales-popups.*') ? 'active' : '' }}">
+                <i class="bi bi-bell nav-icon"></i> Sales Popups
+            </a>
             <a href="{{ route('admin.why-choose.index') }}" class="{{ request()->routeIs('admin.why-choose.*') ? 'active' : '' }}">
                 <i class="bi bi-star nav-icon"></i> Why Choose Us
             </a>
@@ -59,7 +65,13 @@
                 <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
                     <i class="bi bi-box nav-icon"></i> Products
                 </a>
+                <a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                    <i class="bi bi-graph-up nav-icon"></i> Sales Report
+                </a>
                 <h6 class="mt-4 mb-2 text-uppercase text-muted" style="font-size: 0.8rem; padding-left: 15px;">Landing Page</h6>
+                <a href="{{ route('admin.sales-popups.index') }}" class="{{ request()->routeIs('admin.sales-popups.*') ? 'active' : '' }}">
+                    <i class="bi bi-bell nav-icon"></i> Sales Popups
+                </a>
                 <a href="{{ route('admin.why-choose.index') }}" class="{{ request()->routeIs('admin.why-choose.*') ? 'active' : '' }}">
                     <i class="bi bi-star nav-icon"></i> Why Choose Us
                 </a>
@@ -88,6 +100,7 @@
                             <i class="bi bi-person-circle fs-5 align-middle"></i> {{ Auth::user()->name }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><a class="dropdown-item" href="{{ route('admin.profile.index') }}"><i class="bi bi-person me-2"></i> Profile</a></li>
                             <li><a class="dropdown-item" href="{{ route('admin.settings.index') }}"><i class="bi bi-gear me-2"></i> Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
@@ -130,6 +143,17 @@
                     </div>
                 @endif
 
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </div>
@@ -137,6 +161,31 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteForms = document.querySelectorAll('.delete-form');
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

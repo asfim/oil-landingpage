@@ -18,6 +18,11 @@
                     <label class="form-label">Product Name</label>
                     <input type="text" name="name" class="form-control" value="{{ $product->name }}" required>
                 </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Tagline / Subtitle</label>
+                    <input type="text" name="tagline" class="form-control" value="{{ $product->tagline }}" placeholder="e.g. ১০০% প্রাকৃতিক ভেষজ নির্যাস...">
+                </div>
+                
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Price (৳)</label>
                     <input type="number" step="0.01" name="price" class="form-control" value="{{ $product->price }}" required>
@@ -26,11 +31,12 @@
                     <label class="form-label">Old Price (৳)</label>
                     <input type="number" step="0.01" name="old_price" class="form-control" value="{{ $product->old_price }}">
                 </div>
-                
-                <div class="col-md-12 mb-3">
-                    <label class="form-label">Description</label>
-                    <textarea name="desc" class="form-control" rows="3" required>{{ $product->desc }}</textarea>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Badge (e.g. ফ্রি হোম ডেলিভারি)</label>
+                    <input type="text" name="badge" class="form-control" value="{{ $product->badge }}">
                 </div>
+                
+
                 
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Rating (0-5)</label>
@@ -40,10 +46,7 @@
                     <label class="form-label">Reviews Count</label>
                     <input type="number" name="reviews" class="form-control" value="{{ $product->reviews }}" required>
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Badge (e.g. Best Seller)</label>
-                    <input type="text" name="badge" class="form-control" value="{{ $product->badge }}">
-                </div>
+
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Sort Order</label>
                     <input type="number" name="sort_order" class="form-control" value="{{ $product->sort_order }}">

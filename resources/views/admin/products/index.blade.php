@@ -28,7 +28,7 @@
                         </td>
                         <td>
                             <strong>{{ $product->name }}</strong><br>
-                            <small class="text-muted">{{ Str::limit($product->desc, 30) }}</small>
+                            <small class="text-muted">{{ Str::limit($product->tagline, 40) }}</small>
                         </td>
                         <td>
                             <span class="text-primary fw-bold">৳{{ $product->price }}</span>
@@ -46,7 +46,7 @@
                         <td>
                             <div class="btn-group">
                                 <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-light border"><i class="bi bi-pencil"></i></a>
-                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this product?');">
+                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" class="d-inline delete-form">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-light border text-danger"><i class="bi bi-trash"></i></button>

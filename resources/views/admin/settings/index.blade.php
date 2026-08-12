@@ -8,7 +8,7 @@
         <h6 class="mb-0 fw-bold fs-5">Website Settings</h6>
     </div>
     <div class="card-body">
-        <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" id="settingsForm">
             @csrf
 
             <!-- Nav Tabs -->
@@ -205,15 +205,25 @@
                             <input type="file" name="video_file" class="form-control" accept="video/mp4,video/webm,video/quicktime,video/mov">
                             <small class="text-muted d-block mt-1">Upload video file directly to server (Max 100MB).</small>
                             @if(!empty($settings['video_url']))
-                                <div class="mt-2 text-success small">
-                                    <i class="bi bi-check-circle me-1"></i> Current Video Path / URL: <code>{{ $settings['video_url'] }}</code>
+                                <div class="mt-3 p-3 bg-light rounded border">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <div>
+                                            <strong class="d-block text-dark"><i class="bi bi-play-circle me-1"></i> Current Video</strong>
+                                            <small class="text-muted" style="word-break: break-all;"><code>{{ $settings['video_url'] }}</code></small>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" name="remove_video" value="1" id="removeVideo">
+                                            <label class="form-check-label text-danger fw-semibold" for="removeVideo">Remove</label>
+                                        </div>
+                                    </div>
+                                    <video src="{{ Str::startsWith($settings['video_url'], ['http://', 'https://']) ? $settings['video_url'] : asset($settings['video_url']) }}" controls style="max-width: 100%; border-radius: 8px; border: 1px solid #dee2e6; background: #000; max-height: 200px;"></video>
                                 </div>
                             @endif
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold">Or External Video URL (.mp4)</label>
-                            <input type="text" name="video_url" class="form-control" value="{{ $settings['video_url'] ?? '' }}" placeholder="https://example.com/video.mp4">
-                            <small class="text-muted d-block mt-1">Enter direct MP4 link if video is hosted on CDN/external site.</small>
+                            <label class="form-label fw-semibold">Or YouTube Video Link</label>
+                            <input type="url" name="youtube_url" class="form-control" value="{{ $settings['youtube_url'] ?? '' }}" placeholder="https://www.youtube.com/watch?v=...">
+                            <small class="text-muted d-block mt-1">Enter a YouTube video link. This will override the direct video upload if provided.</small>
                         </div>
 
                         <!-- Thumbnail / Poster Image -->
@@ -293,10 +303,100 @@
             </div>
 
             <hr class="my-4">
-            <button type="submit" class="btn btn-primary px-4 py-2">
+            
+            <div id="uploadProgressContainer" style="display: none;" class="mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-semibold text-primary" id="uploadProgressText">Uploading... 0%</span>
+                </div>
+                <div class="progress" style="height: 10px;">
+                    <div id="uploadProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary px-4 py-2" id="saveSettingsBtn">
                 <i class="bi bi-save me-1"></i> Save Settings
             </button>
         </form>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.getElementById('settingsForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        
+        let videoInput = document.querySelector('input[name="video_file"]');
+        let videoFile = videoInput ? videoInput.files[0] : null;
+        
+        let formData = new FormData(this);
+        let submitBtn = document.getElementById('saveSettingsBtn');
+        let progressBarContainer = document.getElementById('uploadProgressContainer');
+        let progressBar = document.getElementById('uploadProgressBar');
+        let progressText = document.getElementById('uploadProgressText');
+        
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Saving...';
+        
+        if (videoFile) {
+            progressBarContainer.style.display = 'block';
+        }
+        
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', this.action, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        
+        xhr.upload.onprogress = function(e) {
+            if (e.lengthComputable && videoFile) {
+                let percentComplete = Math.round((e.loaded / e.total) * 100);
+                progressBar.style.width = percentComplete + '%';
+                progressBar.setAttribute('aria-valuenow', percentComplete);
+                progressText.innerText = 'Uploading... ' + percentComplete + '%';
+            }
+        };
+        
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Settings updated successfully.',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-save me-1"></i> Save Settings';
+                progressBarContainer.style.display = 'none';
+                
+                let errorMsg = 'Something went wrong. Please try again.';
+                try {
+                    let res = JSON.parse(xhr.responseText);
+                    if(res.message) errorMsg = res.message;
+                } catch(e) {}
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: errorMsg,
+                });
+            }
+        };
+        
+        xhr.onerror = function() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="bi bi-save me-1"></i> Save Settings';
+            progressBarContainer.style.display = 'none';
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Network error occurred. Please try again.',
+            });
+        };
+        
+        xhr.send(formData);
+    });
+</script>
+@endpush

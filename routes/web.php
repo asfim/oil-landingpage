@@ -23,6 +23,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         Route::get('settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+
+        Route::resource('sales-popups', \App\Http\Controllers\Admin\SalesPopupController::class);
+
+        Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+
+        Route::get('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'index'])->name('profile.index');
+        Route::patch('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
         
         Route::post('clear-cache', [\App\Http\Controllers\Admin\SystemController::class, 'clearCache'])->name('clear-cache');
         Route::post('clear-logs', [\App\Http\Controllers\Admin\SystemController::class, 'clearLogs'])->name('clear-logs');

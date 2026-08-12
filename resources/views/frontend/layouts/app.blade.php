@@ -34,6 +34,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
   <style>
     /* ============ DESIGN TOKENS (LUXURY LIGHT HERBAL THEME) ============ */
@@ -248,11 +249,18 @@
       animation: spin 26s linear infinite;
     }
     .hero-stage .orbit.o2 { width: 340px; height: 340px; animation-duration: 20s; animation-direction: reverse; border-color: rgba(245, 158, 11, 0.25); }
+    @media(max-width:480px) {
+      .hero-stage .orbit { width: 300px; height: 300px; }
+      .hero-stage .orbit.o2 { width: 220px; height: 220px; }
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
     .hero-product {
       position: relative; width: 320px; height: 540px; display: flex; align-items: center; justify-content: center;
       filter: drop-shadow(0 20px 45px rgba(18, 75, 40, 0.12));
       transition: transform 0.15s ease-out;
+    }
+    @media(max-width:480px) {
+      .hero-product { width: 240px; height: 400px; }
     }
     .real-bottle-container {
       position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
@@ -528,8 +536,8 @@
     .featured-visual .picon { width: 220px; height: 220px; animation: float 6s ease-in-out infinite; filter: drop-shadow(0 20px 40px rgba(18,75,40,0.2)); }
     .featured-copy { padding: 56px; }
     @media(max-width:760px) { .featured-copy { padding: 36px 28px 44px; } }
-    .featured-copy h3 { font-size: clamp(26px, 3.4vw, 36px); margin-top: 14px; color: #0B1910; }
-    .featured-copy p.desc { color: var(--text-muted); margin-top: 14px; font-size: 15.5px; }
+    .featured-copy h3 { font-size: clamp(24px, 3vw, 36px); margin-top: 14px; color: #0B1910; }
+    .featured-copy p.desc { color: var(--text-muted); margin-top: 14px; font-size: 15px; }
     .featured-benefits { margin-top: 26px; display: flex; flex-direction: column; gap: 12px; }
     .featured-benefits li { display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: var(--text); }
     .featured-benefits li::before { content: ''; width: 18px; height: 18px; border-radius: 50%; background: var(--ion-soft); border: 1px solid var(--ion); flex-shrink: 0; }
@@ -634,6 +642,7 @@
       width: 100%; background: #F8FAF9; border: 1px solid var(--stroke-strong);
       border-radius: 12px; padding: 13px 16px; color: var(--text); font-size: 15px; outline: none;
       transition: border-color .25s var(--ease), background .25s var(--ease);
+      -webkit-appearance: none;
     }
     .field input::placeholder { color: var(--text-dim); }
     .field input:focus, .field select:focus { border-color: var(--ion); background: #FFFFFF; box-shadow: 0 0 0 3px rgba(18,75,40,0.12); }
@@ -755,9 +764,31 @@
     .sticky-cta.show { opacity: 1; pointer-events: auto; }
     .sticky-cta:active { transform: translateX(-50%) scale(.96); }
 
-    footer { border-top: 1px solid var(--stroke); padding: 44px 0 100px; background: #FFFFFF; }
-    .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
-    footer p { color: var(--text-dim); font-size: 13.5px; }
+    /* ============ FLOATING CONTACT ============ */
+    .floating-contact {
+      position: fixed; bottom: 22px; right: 22px; z-index: 60;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .f-icon {
+      width: 50px; height: 50px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    }
+    .f-icon:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 14px 30px rgba(0,0,0,0.25); color: #fff; }
+    .f-call { background: var(--ion); }
+    .f-wa { background: #25D366; }
+    .f-mail { background: #EA4335; }
+    
+    @media(max-width: 760px) {
+      .floating-contact { bottom: 22px; right: 16px; }
+      .f-icon { width: 44px; height: 44px; font-size: 18px; }
+    }
+
+    footer { border-top: 1px solid var(--stroke); padding: 12px 0 16px; background: #FFFFFF; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    @media(max-width: 560px) { .footer-inner { justify-content: center; text-align: center; } .footer-inner > div { justify-content: center; text-align: center; } }
+    footer p { color: var(--text-dim); font-size: 12px; }
   </style>
   @stack('styles')
 </head>
@@ -778,6 +809,24 @@
   </main>
 
   @include('frontend.partials.footer')
+
+  <div class="floating-contact">
+    @if(!empty($settings['whatsapp_number']))
+    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $settings['whatsapp_number']) }}" target="_blank" class="f-icon f-wa" aria-label="WhatsApp">
+      <i class="bi bi-whatsapp"></i>
+    </a>
+    @endif
+    @if(!empty($settings['contact_phone']))
+    <a href="tel:{{ $settings['contact_phone'] }}" class="f-icon f-call" aria-label="Call Us">
+      <i class="bi bi-telephone-fill"></i>
+    </a>
+    @endif
+    @if(!empty($settings['contact_email']))
+    <a href="mailto:{{ $settings['contact_email'] }}" class="f-icon f-mail" aria-label="Email Us">
+      <i class="bi bi-envelope-fill"></i>
+    </a>
+    @endif
+  </div>
 
   <button class="sticky-cta" id="stickyCta">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2l3 6h6l3-6M4 8h16l-1.5 11a2 2 0 0 1-2 1.8H7.5a2 2 0 0 1-2-1.8L4 8z"/></svg>

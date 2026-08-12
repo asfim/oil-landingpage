@@ -23,18 +23,18 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'desc' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'old_price' => 'nullable|numeric|min:0',
+            'tagline' => 'nullable|string|max:255',
+            'price' => 'required|numeric|min:0|max:99999999',
+            'old_price' => 'nullable|numeric|min:0|max:99999999',
             'rating' => 'required|numeric|min:0|max:5',
             'reviews' => 'required|integer|min:0',
             'badge' => 'nullable|string|max:50',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer',
+            'sort_order' => 'nullable|integer',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
         $validated['img'] = 'images/p1.png'; // Default for now until we add upload
+        $validated['code'] = 'PRD-' . strtoupper(uniqid());
 
         if ($request->hasFile('img_file')) {
             $path = $request->file('img_file')->store('products', 'public');
@@ -55,14 +55,13 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'desc' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'old_price' => 'nullable|numeric|min:0',
+            'tagline' => 'nullable|string|max:255',
+            'price' => 'required|numeric|min:0|max:99999999',
+            'old_price' => 'nullable|numeric|min:0|max:99999999',
             'rating' => 'required|numeric|min:0|max:5',
             'reviews' => 'required|integer|min:0',
             'badge' => 'nullable|string|max:50',
-            'is_active' => 'boolean',
-            'sort_order' => 'integer',
+            'sort_order' => 'nullable|integer',
         ]);
 
         $validated['is_active'] = $request->has('is_active');

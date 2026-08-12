@@ -35,9 +35,9 @@
             </div>
         </div>
     </div>
-    <div class="card-body p-0">
+    <div class="card-body p-3">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" id="ordersTable">
                 <thead class="table-light">
                     <tr>
                         <th>Order ID</th>
@@ -95,7 +95,7 @@
                                 <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-light border" title="View Full Details">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete order #{{ $order->id }}?');">
+                                <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" class="d-inline delete-form">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-light border text-danger" title="Delete">
@@ -117,12 +117,55 @@
             </table>
         </div>
     </div>
-    @if($orders->hasPages())
-    <div class="card-footer bg-white py-3">
-        <div class="d-flex justify-content-center">
-            {{ $orders->withQueryString()->links() }}
-        </div>
-    </div>
-    @endif
+
 </div>
 @endsection
+
+@push('styles')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+<style>
+    /* Slight tweak to ensure datatables look good */
+    div.dataTables_wrapper div.dataTables_length select { width: auto; display: inline-block; }
+    .dt-buttons { margin-bottom: 15px; }
+</style>
+@endpush
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- DataTables Buttons -->
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var table = $('#ordersTable').DataTable({
+            "order": [[ 0, "desc" ]],
+            "pageLength": 25,
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            "language": {
+                "emptyTable": "No orders found."
+            },
+            "dom": "<'row mb-2'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                   "<'row mb-2'<'col-sm-12'B>>" +
+                   "<'row'<'col-sm-12'tr>>" +
+                   "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            "buttons": [
+                { extend: 'copy', className: 'btn btn-sm btn-light border' },
+                { extend: 'csv', className: 'btn btn-sm btn-light border' },
+                { extend: 'excel', className: 'btn btn-sm btn-light border' },
+                { extend: 'pdf', className: 'btn btn-sm btn-light border' },
+                { extend: 'print', className: 'btn btn-sm btn-light border' }
+            ]
+        });
+    });
+</script>
+@endpush

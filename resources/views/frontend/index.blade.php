@@ -22,8 +22,6 @@
         </div>
         <div class="hero-trust reveal in">
           <div><strong>{{ $settings['hero_rating'] ?? '৪.৮/৫' }}</strong>গ্রাহক রেটিং</div>
-          <div><strong>৳{{ $settings['delivery_charge'] ?? '60' }}</strong>ফ্ল্যাট ডেলিভারি</div>
-          <div><strong>COD</strong>ক্যাশ অন ডেলিভারি</div>
         </div>
       </div>
       <div class="hero-stage">
@@ -72,10 +70,12 @@
     <div class="products-grid" id="productGrid">
       @foreach($products as $index => $p)
         <div class="product-offer-card reveal reveal-delay-{{ ($index % 3) + 1 }} {{ $loop->first ? 'selected' : '' }}" data-id="{{ $p->id }}" data-price="{{ $p->price }}">
+          @if($p->badge)
           <div class="offer-top-badge">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            <span>ফ্রি হোম ডেলিভারি</span>
+            <span>{{ $p->badge }}</span>
           </div>
+          @endif
           
           <div class="offer-card-inner">
             <div class="offer-img-box">
@@ -86,10 +86,10 @@
             <div class="offer-details">
               <div class="offer-rating-row">
                 <span class="stars">★★★★★</span>
-                <span class="score">৪.৯ (১২০+ রিভিউ)</span>
+                <span class="score">{{ $p->rating }} ({{ $p->reviews }}+ রিভিউ)</span>
               </div>
               <h3 class="offer-title">{{ $p->name }}</h3>
-              <p class="offer-subdesc">১০০% প্রাকৃতিক ভেষজ নির্যাস — ১০০ml বিশুদ্ধ তেল</p>
+              <p class="offer-subdesc">{{ $p->tagline }}</p>
 
               <div class="offer-price-stack">
                 @if($p->old_price)
@@ -132,24 +132,35 @@
         $hasPoster = !empty($settings['video_poster']);
         $posterUrl = $hasPoster ? (\Illuminate\Support\Str::startsWith($settings['video_poster'], ['http://', 'https://']) ? $settings['video_poster'] : asset($settings['video_poster'])) : null;
         
+        $youtubeUrl = $settings['youtube_url'] ?? '';
+        $youtubeId = null;
+        if ($youtubeUrl) {
+            preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i', $youtubeUrl, $match);
+            $youtubeId = $match[1] ?? null;
+        }
+
         $rawVideoUrl = $settings['video_url'] ?? '';
         if (!empty($rawVideoUrl)) {
             $videoSrc = \Illuminate\Support\Str::startsWith($rawVideoUrl, ['http://', 'https://', '/']) ? $rawVideoUrl : asset($rawVideoUrl);
-            $videoSrc = $videoSrc . '#t=0.001';
         } else {
             $videoSrc = '';
         }
       @endphp
-      <video id="novaVideo" @if($posterUrl) poster="{{ $posterUrl }}" @endif preload="metadata" playsinline controls>
-        @if($videoSrc)
-          <source src="{{ $videoSrc }}" type="video/mp4">
-        @endif
-      </video>
-      <div class="video-play" id="videoPlayOverlay">
-        <button class="play-btn" id="playBtn" aria-label="ভিডিও চালান">
-          <svg viewBox="0 0 24 24" fill="#0A0D13"><path d="M8 5v14l11-7z"/></svg>
-        </button>
-      </div>
+      
+      @if($youtubeId)
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ $youtubeId }}?rel=0&showinfo=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5;"></iframe>
+      @else
+        <video id="novaVideo" @if($posterUrl) poster="{{ $posterUrl }}" @endif preload="auto" playsinline controls>
+          @if($videoSrc)
+            <source src="{{ $videoSrc }}" type="video/mp4">
+          @endif
+        </video>
+        <div class="video-play" id="videoPlayOverlay">
+          <button class="play-btn" id="playBtn" aria-label="ভিডিও চালান">
+            <svg viewBox="0 0 24 24" fill="#0A0D13"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+      @endif
     </div>
   </div>
 </section>
@@ -165,13 +176,17 @@
       @foreach($whyItems as $index => $w)
         <div class="why-card reveal reveal-delay-{{ ($index % 3) + 1 }}">
           <div class="why-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-              @if(Str::contains($w->icon ?? '', ['<path', '<polyline', '<circle', '<rect', '<line']))
-                {!! $w->icon !!}
-              @else
-                <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>
-              @endif
-            </svg>
+            @if(Str::startsWith($w->icon ?? '', 'bi-'))
+              <i class="bi {{ $w->icon }}" style="font-size: 26px; color: var(--ion);"></i>
+            @else
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                @if(Str::contains($w->icon ?? '', ['<path', '<polyline', '<circle', '<rect', '<line']))
+                  {!! $w->icon !!}
+                @else
+                  <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>
+                @endif
+              </svg>
+            @endif
           </div>
           <h4>{{ $w->title }}</h4>
           <p>{{ $w->description ?? $w->desc ?? '' }}</p>
@@ -275,6 +290,97 @@
   </div>
 </section>
 @endsection
+
+<!-- Sales Popup Container -->
+@if(isset($salesPopups) && $salesPopups->count() > 0)
+<div class="sales-popup" id="salesPopup">
+  <div class="sp-content">
+    <div class="sp-img">
+      <img src="" alt="Product">
+    </div>
+    <div class="sp-info">
+      <div class="sp-header">
+        <span class="sp-name fw-bold"></span>
+        <span class="sp-time text-muted small"></span>
+      </div>
+      <div class="sp-text">
+         <span class="sp-product fw-semibold"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.sales-popup {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  padding: 12px;
+  z-index: 9999;
+  width: 320px;
+  transform: translateY(150px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.sales-popup.show {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+.sp-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sp-img img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.sp-info {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.sp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+.sp-name {
+  color: #0B1910;
+  font-size: 14px;
+}
+.sp-time {
+  font-size: 11px;
+}
+.sp-text {
+  color: #4b5563;
+}
+.sp-product {
+  color: #10b981;
+}
+@media (max-width: 768px) {
+  .sales-popup {
+    bottom: 80px; /* Above mobile sticky CTA */
+    left: 50%;
+    transform: translateX(-50%) translateY(150px);
+    width: 90%;
+    max-width: 340px;
+  }
+  .sales-popup.show {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+</style>
+@endif
 
 @push('scripts')
 <script>
@@ -685,5 +791,52 @@
       lastDrawnFrame = -1;
     }, { passive: true });
   })();
+
+  /* Sales Popup Logic */
+  @if(isset($salesPopups) && $salesPopups->count() > 0)
+    const salesPopups = @json($salesPopups);
+    const popupEl = document.getElementById('salesPopup');
+    if (popupEl && salesPopups.length > 0) {
+      let currentPopupIndex = 0;
+
+      function showNextPopup() {
+        // Hide first
+        popupEl.classList.remove('show');
+        
+        setTimeout(() => {
+          const popup = salesPopups[currentPopupIndex];
+          
+          // Update content
+          const imgEl = popupEl.querySelector('.sp-img img');
+          if (popup.image) {
+            imgEl.src = `{{ asset('') }}${popup.image}`;
+            imgEl.style.display = 'block';
+          } else {
+            imgEl.style.display = 'none';
+          }
+          
+          popupEl.querySelector('.sp-name').textContent = popup.customer_name;
+          popupEl.querySelector('.sp-time').textContent = popup.time_ago;
+          popupEl.querySelector('.sp-product').textContent = popup.product_name;
+
+          // Show
+          popupEl.classList.add('show');
+          
+          // Move to next index
+          currentPopupIndex = (currentPopupIndex + 1) % salesPopups.length;
+          
+          // Hide after 5 seconds, then wait 10 seconds to show next
+          setTimeout(() => {
+            popupEl.classList.remove('show');
+            setTimeout(showNextPopup, 10000);
+          }, 5000);
+          
+        }, 500); // Small delay to ensure transition finishes before changing content
+      }
+
+      // Start the cycle after 3 seconds
+      setTimeout(showNextPopup, 3000);
+    }
+  @endif
 </script>
 @endpush

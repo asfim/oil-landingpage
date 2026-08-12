@@ -17,6 +17,7 @@ class HomeController extends Controller
         $whyItems = \App\Models\WhyChooseItem::where('is_active', true)->orderBy('sort_order')->get();
         $benefits = \App\Models\Benefit::where('is_active', true)->orderBy('sort_order')->get();
         $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
+        $salesPopups = \App\Models\SalesPopup::where('is_active', true)->orderBy('id', 'desc')->get();
 
         // If whyItems is empty, fallback to default array for robustness if not seeded
         if ($whyItems->isEmpty()) {
@@ -34,7 +35,7 @@ class HomeController extends Controller
             ]);
         }
 
-        return view('frontend.index', compact('products', 'whyItems', 'benefits', 'settings'));
+        return view('frontend.index', compact('products', 'whyItems', 'benefits', 'settings', 'salesPopups'));
     }
 
     /**

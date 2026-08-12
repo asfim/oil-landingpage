@@ -28,9 +28,9 @@
                 </div>
 
                 <div class="col-md-12 mb-3">
-                    <label class="form-label">SVG Icon Path Code (Optional)</label>
-                    <input type="text" name="icon" class="form-control" placeholder='<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>'>
-                    <small class="text-muted">Enter SVG inner path elements or leave empty for default shield icon.</small>
+                    <label class="form-label">Icon Class (e.g. bi-star, bi-heart)</label>
+                    <input type="text" name="icon" class="form-control" placeholder="bi-star">
+                    <small class="text-muted">Enter a Bootstrap Icon class name or leave empty for default shield icon.</small>
                 </div>
 
                 <div class="col-md-12 mb-3">

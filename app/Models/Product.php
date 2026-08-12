@@ -16,6 +16,10 @@ class Product extends Model
         'img',
         'is_featured',
         'is_active',
+        'rating',
+        'reviews',
+        'badge',
+        'sort_order',
     ];
 
     protected function casts(): array

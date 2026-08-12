@@ -25,8 +25,7 @@ class WhyChooseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'icon' => 'nullable|string',
-            'sort_order' => 'nullable|integer',
-            'is_active' => 'nullable|boolean'
+            'sort_order' => 'nullable|integer'
         ]);
 
         $validated['is_active'] = $request->has('is_active');
@@ -48,8 +47,7 @@ class WhyChooseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'icon' => 'nullable|string',
-            'sort_order' => 'nullable|integer',
-            'is_active' => 'nullable|boolean'
+            'sort_order' => 'nullable|integer'
         ]);
 
         $validated['is_active'] = $request->has('is_active');

@@ -16,7 +16,7 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->except(['_token', 'logo_file', 'favicon_file', 'poster_file', 'video_file', 'remove_poster', 'remove_logo', 'remove_favicon']);
+        $data = $request->except(['_token', 'logo_file', 'favicon_file', 'poster_file', 'video_file', 'remove_poster', 'remove_logo', 'remove_favicon', 'remove_video']);
         
         foreach ($data as $key => $value) {
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
@@ -28,8 +28,10 @@ class SettingController extends Controller
             mkdir($uploadPath, 0755, true);
         }
 
-        // Handle Direct Video Upload
-        if ($request->hasFile('video_file')) {
+        // Handle Direct Video Upload & Removal
+        if ($request->has('remove_video')) {
+            Setting::where('key', 'video_url')->update(['value' => null]);
+        } elseif ($request->hasFile('video_file')) {
             $request->validate([
                 'video_file' => 'required|mimes:mp4,webm,ogg,quicktime,mov|max:102400' // max 100MB
             ]);
@@ -67,6 +69,10 @@ class SettingController extends Controller
             $filename = 'poster_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->move($uploadPath, $filename);
             Setting::updateOrCreate(['key' => 'video_poster'], ['value' => 'uploads/settings/' . $filename]);
+        }
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Settings updated successfully.']);
         }
 
         return redirect()->route('admin.settings.index')->with('success', 'Settings updated successfully.');

@@ -39,7 +39,7 @@ class OrderController extends Controller
             $query->where('status', $request->status);
         }
 
-        $orders = $query->paginate(20);
+        $orders = $query->get();
 
         return view('admin.orders.index', compact('orders', 'repeatCount'));
     }
