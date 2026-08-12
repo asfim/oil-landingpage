@@ -15,7 +15,7 @@
       <div class="hero-copy">
         <div class="eyebrow reveal in">{{ $settings['hero_eyebrow'] ?? 'নতুন কালেকশন — ৪টি প্রোডাক্ট' }}</div>
         <h1 class="reveal in">{!! $settings['hero_title'] ?? 'আপনার প্রতিদিনকে <em>পাওয়ার আপ</em> করুন' !!}</h1>
-        <p class="lead reveal in">{{ $settings['hero_description'] ?? 'প্রিমিয়াম সাউন্ড, স্মার্ট ট্র্যাকিং আর সারাদিনের চার্জ — একসাথে, একটাই ব্র্যান্ডে। NOVA-র ৪টি ফ্ল্যাগশিপ প্রোডাক্ট এখন বিশেষ ছাড়ে।' }}</p>
+        <p class="lead reveal in">{{ $settings['hero_description'] ?? 'প্রিমিয়াম সাউন্ড, স্মার্ট ট্র্যাকিং আর সারাদিনের চার্জ — একসাথে, একটাই ব্র্যান্ডে। Crowns IT-র ৪টি ফ্ল্যাগশিপ প্রোডাক্ট এখন বিশেষ ছাড়ে।' }}</p>
         <div class="hero-ctas reveal in">
           <a href="#order" class="btn btn-primary">{{ $settings['hero_btn_text'] ?? 'Order Now' }}</a>
           <a href="#products" class="btn btn-ghost">View Products</a>
@@ -125,7 +125,7 @@
     <div class="section-head reveal">
       <div class="eyebrow">{{ $settings['video_eyebrow'] ?? 'লাইভ ডেমো' }}</div>
       <h2>{{ $settings['video_title'] ?? 'See It In Action' }}</h2>
-      <p>{{ $settings['video_description'] ?? 'NOVA প্রোডাক্টগুলো বাস্তবে কেমন পারফর্ম করে, নিজের চোখে দেখুন।' }}</p>
+      <p>{{ $settings['video_description'] ?? 'Crowns IT প্রোডাক্টগুলো বাস্তবে কেমন পারফর্ম করে, নিজের চোখে দেখুন।' }}</p>
     </div>
     <div class="video-card reveal">
       @php
@@ -169,7 +169,7 @@
 <section id="why" class="section-pad">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">{{ $settings['why_eyebrow'] ?? 'কেন NOVA' }}</div>
+      <div class="eyebrow">{{ $settings['why_eyebrow'] ?? 'কেন Crowns IT' }}</div>
       <h2>{{ $settings['why_title'] ?? 'যে কারণে গ্রাহকরা আমাদের বেছে নেন' }}</h2>
     </div>
     <div class="why-grid" id="whyGrid">

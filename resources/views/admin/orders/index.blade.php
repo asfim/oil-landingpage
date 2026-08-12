@@ -16,20 +16,20 @@
             </div>
 
             <!-- Status Filter Pills -->
-            <div class="nav nav-pills gap-1">
-                <a href="{{ route('admin.orders.index', ['status' => 'all']) }}" class="nav-link btn-sm {{ !request('filter') && (!request('status') || request('status') == 'all') ? 'active bg-dark' : 'bg-light text-dark' }}">
+            <div class="nav nav-pills gap-1 flex-nowrap overflow-x-auto pb-1" style="-webkit-overflow-scrolling: touch;">
+                <a href="{{ route('admin.orders.index', ['status' => 'all']) }}" class="nav-link btn-sm text-nowrap {{ !request('filter') && (!request('status') || request('status') == 'all') ? 'active bg-dark' : 'bg-light text-dark' }}">
                     All Orders
                 </a>
-                <a href="{{ route('admin.orders.index', ['status' => 'pending']) }}" class="nav-link btn-sm {{ request('status') == 'pending' ? 'active bg-warning text-dark' : 'bg-light text-dark' }}">
+                <a href="{{ route('admin.orders.index', ['status' => 'pending']) }}" class="nav-link btn-sm text-nowrap {{ request('status') == 'pending' ? 'active bg-warning text-dark' : 'bg-light text-dark' }}">
                     Pending
                 </a>
-                <a href="{{ route('admin.orders.index', ['status' => 'confirmed']) }}" class="nav-link btn-sm {{ request('status') == 'confirmed' ? 'active bg-primary' : 'bg-light text-dark' }}">
+                <a href="{{ route('admin.orders.index', ['status' => 'confirmed']) }}" class="nav-link btn-sm text-nowrap {{ request('status') == 'confirmed' ? 'active bg-primary' : 'bg-light text-dark' }}">
                     Confirmed
                 </a>
-                <a href="{{ route('admin.orders.index', ['status' => 'delivered']) }}" class="nav-link btn-sm {{ request('status') == 'delivered' ? 'active bg-success' : 'bg-light text-dark' }}">
+                <a href="{{ route('admin.orders.index', ['status' => 'delivered']) }}" class="nav-link btn-sm text-nowrap {{ request('status') == 'delivered' ? 'active bg-success' : 'bg-light text-dark' }}">
                     Delivered
                 </a>
-                <a href="{{ route('admin.orders.index', ['status' => 'cancelled']) }}" class="nav-link btn-sm {{ request('status') == 'cancelled' ? 'active bg-danger' : 'bg-light text-dark' }}">
+                <a href="{{ route('admin.orders.index', ['status' => 'cancelled']) }}" class="nav-link btn-sm text-nowrap {{ request('status') == 'cancelled' ? 'active bg-danger' : 'bg-light text-dark' }}">
                     Cancelled
                 </a>
             </div>

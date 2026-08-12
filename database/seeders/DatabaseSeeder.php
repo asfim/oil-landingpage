@@ -21,10 +21,11 @@ class DatabaseSeeder extends Seeder
         );
 
         $settings = [
-            'site_title' => 'NOVA — Power your everyday',
-            'site_description' => 'NOVA প্রিমিয়াম টেক ও ভেষজ প্রোডাক্টস — ক্যাশ অন ডেলিভারি সহ দ্রুত ডেলিভারি।',
+            'site_name' => 'Crowns IT',
+            'site_title' => 'Crowns IT — Power your everyday',
+            'site_description' => 'Crowns IT প্রিমিয়াম টেক ও ভেষজ প্রোডাক্টস — ক্যাশ অন ডেলিভারি সহ দ্রুত ডেলিভারি।',
             'hero_title' => 'আপনার প্রতিদিনকে <em>পাওয়ার আপ</em> করুন',
-            'hero_description' => 'প্রিমিয়াম সাউন্ড, স্মার্ট ট্র্যাকিং আর সারাদিনের চার্জ — একসাথে, একটাই ব্র্যান্ডে। NOVA-র ৪টি ফ্ল্যাগশিপ প্রোডাক্ট এখন বিশেষ ছাড়ে।',
+            'hero_description' => 'প্রিমিয়াম সাউন্ড, স্মার্ট ট্র্যাকিং আর সারাদিনের চার্জ — একসাথে, একটাই ব্র্যান্ডে। Crowns IT-র ৪টি ফ্ল্যাগশিপ প্রোডাক্ট এখন বিশেষ ছাড়ে।',
             'hero_rating' => '৪.৮/৫',
             'delivery_charge' => '60'
         ];

@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>@yield('title', $settings['site_title'] ?? 'NOVA — Power your everyday')</title>
-  <meta name="description" content="{{ $settings['site_description'] ?? 'NOVA প্রিমিয়াম টেক ও ভেষজ প্রোডাক্টস — ক্যাশ অন ডেলিভারি সহ দ্রুত ডেলিভারি।' }}">
+  <title>@yield('title', $settings['site_title'] ?? 'Crowns IT — Power your everyday')</title>
+  <meta name="description" content="{{ $settings['site_description'] ?? 'Crowns IT প্রিমিয়াম টেক ও ভেষজ প্রোডাক্টস — ক্যাশ অন ডেলিভারি সহ দ্রুত ডেলিভারি।' }}">
   
   @if(!empty($settings['site_favicon']))
   <link rel="icon" href="{{ asset($settings['site_favicon']) }}" type="image/x-icon">
@@ -122,6 +122,7 @@
     }
 
     .wrap { max-width:1240px; margin:0 auto; padding:0 24px; }
+    @media(max-width:480px) { .wrap { padding:0 16px; } }
     .eyebrow {
       font-family: var(--font-mono);
       font-size: 12.5px;
@@ -217,9 +218,12 @@
       .hero-sticky-wrap { padding: 20px 0; }
       .hero-grid { grid-template-columns: 1fr; gap: 16px; }
     }
+    @media(max-height:700px) and (max-width:480px) {
+      .hero-sticky-wrap { padding: 5px 0; }
+    }
 
     .hero-copy h1 {
-      font-size: clamp(34px, 5.5vw, 66px); line-height: 1.05; margin-top: 14px;
+      font-size: clamp(28px, 6.5vw, 66px); line-height: 1.05; margin-top: 14px;
       color: #0B1910; font-weight: 800;
     }
     .hero-copy h1 em { font-style: normal; background: linear-gradient(97deg, var(--ion), #059669); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -250,8 +254,8 @@
     }
     .hero-stage .orbit.o2 { width: 340px; height: 340px; animation-duration: 20s; animation-direction: reverse; border-color: rgba(245, 158, 11, 0.25); }
     @media(max-width:480px) {
-      .hero-stage .orbit { width: 300px; height: 300px; }
-      .hero-stage .orbit.o2 { width: 220px; height: 220px; }
+      .hero-stage .orbit { width: 280px; height: 280px; }
+      .hero-stage .orbit.o2 { width: 200px; height: 200px; }
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     .hero-product {
@@ -260,7 +264,7 @@
       transition: transform 0.15s ease-out;
     }
     @media(max-width:480px) {
-      .hero-product { width: 240px; height: 400px; }
+      .hero-product { width: 180px; height: 320px; }
     }
     .real-bottle-container {
       position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
@@ -291,7 +295,8 @@
     .hero-chip.c1 { top: 6%; left: -4%; animation-delay: .3s; }
     .hero-chip.c2 { bottom: 12%; right: -6%; animation-delay: 1.1s; }
     @keyframes chipfloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-    @media(max-width:900px) { .hero-stage { height: 360px; margin-top: 20px; } .hero-chip { display: none; } }
+    @media(max-width:900px) { .hero-stage { height: 380px; margin-top: 20px; } .hero-chip { display: none; } }
+    @media(max-width:480px) { .hero-stage { height: 320px; margin-top: 10px; } }
 
     /* ============ BENEFIT STRIP ============ */
     .benefit-strip {
@@ -354,6 +359,7 @@
       position: absolute;
       top: 0;
       right: 0;
+      z-index: 10;
       background: linear-gradient(135deg, rgba(18,75,40,0.12), rgba(16,185,129,0.18));
       color: var(--ion);
       border: 1px solid rgba(18,75,40,0.22);
@@ -390,6 +396,31 @@
       border: 1px solid rgba(18,55,30,0.1);
       box-shadow: inset 0 0 20px rgba(18,75,40,0.04);
     }
+    
+    @media(max-width: 480px) {
+      .product-offer-card {
+        padding: 40px 16px 20px 16px;
+      }
+      .offer-card-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 26px;
+      }
+      .offer-img-box {
+        width: 100%;
+        max-width: 200px;
+        height: 180px;
+        margin-bottom: 8px;
+      }
+      .offer-details {
+        align-items: center;
+      }
+      .offer-price-stack {
+        justify-content: center;
+      }
+    }
+
     .offer-img-glow {
       position: absolute;
       width: 110px;
@@ -791,6 +822,8 @@
     footer p { color: var(--text-dim); font-size: 12px; }
   </style>
   @stack('styles')
+  <!-- Custom Head Scripts -->
+  {!! $settings['head_scripts'] ?? '' !!}
 </head>
 <body>
 
@@ -834,5 +867,7 @@
   </button>
 
   @stack('scripts')
+  <!-- Custom Body Scripts -->
+  {!! $settings['body_scripts'] ?? '' !!}
 </body>
 </html>

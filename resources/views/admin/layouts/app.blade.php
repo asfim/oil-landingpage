@@ -16,6 +16,12 @@
         .sidebar .nav-icon { width: 25px; text-align: center; margin-right: 5px; }
         .main-content { padding: 20px; }
         .top-header { background: #fff; padding: 10px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        @media (max-width: 576px) {
+            .main-content { padding: 10px; }
+            .top-header { padding: 10px; }
+            .top-header .page-title { display: none; } /* Hide title on very small screens to fit buttons */
+            .top-header .user-name { display: none; }
+        }
     </style>
     @stack('styles')
 </head>
@@ -87,17 +93,17 @@
             @auth
             <!-- Header -->
             <div class="top-header">
-                <div>
-                    <button class="btn btn-light d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-light d-md-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
                         <i class="bi bi-list fs-5"></i>
                     </button>
-                    <span class="fs-5 fw-semibold ms-2">@yield('title', 'Dashboard')</span>
+                    <span class="fs-5 fw-semibold page-title">@yield('title', 'Dashboard')</span>
                 </div>
-                <div class="d-flex align-items-center gap-3">
-                    <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> View Site</a>
+                <div class="d-flex align-items-center gap-2 gap-md-3">
+                    <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> <span class="d-none d-sm-inline">View Site</span></a>
                     <div class="dropdown">
-                        <a href="#" class="text-decoration-none dropdown-toggle text-dark" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle fs-5 align-middle"></i> {{ Auth::user()->name }}
+                        <a href="#" class="text-decoration-none dropdown-toggle text-dark d-flex align-items-center gap-1" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-5"></i> <span class="user-name">{{ Auth::user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                             <li><a class="dropdown-item" href="{{ route('admin.profile.index') }}"><i class="bi bi-person me-2"></i> Profile</a></li>

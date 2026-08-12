@@ -13,29 +13,33 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = Product::where('is_active', true)->orderBy('sort_order')->get();
-        $whyItems = \App\Models\WhyChooseItem::where('is_active', true)->orderBy('sort_order')->get();
-        $benefits = \App\Models\Benefit::where('is_active', true)->orderBy('sort_order')->get();
-        $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
-        $salesPopups = \App\Models\SalesPopup::where('is_active', true)->orderBy('id', 'desc')->get();
+        $data = \Illuminate\Support\Facades\Cache::remember('home_page_data', 3600, function () {
+            $products = Product::where('is_active', true)->orderBy('sort_order')->get();
+            $whyItems = \App\Models\WhyChooseItem::where('is_active', true)->orderBy('sort_order')->get();
+            $benefits = \App\Models\Benefit::where('is_active', true)->orderBy('sort_order')->get();
+            $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
+            $salesPopups = \App\Models\SalesPopup::where('is_active', true)->orderBy('id', 'desc')->get();
 
-        // If whyItems is empty, fallback to default array for robustness if not seeded
-        if ($whyItems->isEmpty()) {
-            $whyItems = collect([
-                (object)[
-                    'title' => 'মানের নিশ্চয়তা',
-                    'description' => 'প্রতিটি প্রোডাক্ট কোয়ালিটি চেক করে পাঠানো হয়।',
-                    'icon' => '<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>'
-                ],
-                (object)[
-                    'title' => 'ফাস্ট ডেলিভারি',
-                    'description' => 'ঢাকার ভিতরে ২৪-৪৮ ঘণ্টায় ডেলিভারি।',
-                    'icon' => '<path d="M3 12h13M13 6l6 6-6 6"/>'
-                ]
-            ]);
-        }
+            // If whyItems is empty, fallback to default array for robustness if not seeded
+            if ($whyItems->isEmpty()) {
+                $whyItems = collect([
+                    (object)[
+                        'title' => 'মানের নিশ্চয়তা',
+                        'description' => 'প্রতিটি প্রোডাক্ট কোয়ালিটি চেক করে পাঠানো হয়।',
+                        'icon' => '<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/>'
+                    ],
+                    (object)[
+                        'title' => 'ফাস্ট ডেলিভারি',
+                        'description' => 'ঢাকার ভিতরে ২৪-৪৮ ঘণ্টায় ডেলিভারি।',
+                        'icon' => '<path d="M3 12h13M13 6l6 6-6 6"/>'
+                    ]
+                ]);
+            }
 
-        return view('frontend.index', compact('products', 'whyItems', 'benefits', 'settings', 'salesPopups'));
+            return compact('products', 'whyItems', 'benefits', 'settings', 'salesPopups');
+        });
+
+        return view('frontend.index', $data);
     }
 
     /**

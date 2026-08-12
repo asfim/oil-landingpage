@@ -12,35 +12,40 @@
             @csrf
 
             <!-- Nav Tabs -->
-            <ul class="nav nav-tabs mb-4" id="settingTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general-panel" type="button" role="tab" aria-controls="general-panel" aria-selected="true">
+            <ul class="nav custom-tabs mb-4 flex-nowrap overflow-x-auto hide-scrollbar" id="settingTabs" role="tablist" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                <li class="nav-item flex-shrink-0" role="presentation">
+                    <button class="nav-link active text-nowrap" id="general-tab" data-bs-toggle="tab" data-bs-target="#general-panel" type="button" role="tab" aria-controls="general-panel" aria-selected="true">
                         <i class="bi bi-sliders me-1"></i> General & Shipping
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero-panel" type="button" role="tab" aria-controls="hero-panel" aria-selected="false">
+                <li class="nav-item flex-shrink-0" role="presentation">
+                    <button class="nav-link text-nowrap" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero-panel" type="button" role="tab" aria-controls="hero-panel" aria-selected="false">
                         <i class="bi bi-window me-1"></i> Hero Section
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="why-tab" data-bs-toggle="tab" data-bs-target="#why-panel" type="button" role="tab" aria-controls="why-panel" aria-selected="false">
+                <li class="nav-item flex-shrink-0" role="presentation">
+                    <button class="nav-link text-nowrap" id="why-tab" data-bs-toggle="tab" data-bs-target="#why-panel" type="button" role="tab" aria-controls="why-panel" aria-selected="false">
                         <i class="bi bi-star me-1"></i> Why Choose Us
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout-panel" type="button" role="tab" aria-controls="checkout-panel" aria-selected="false">
+                <li class="nav-item flex-shrink-0" role="presentation">
+                    <button class="nav-link text-nowrap" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout-panel" type="button" role="tab" aria-controls="checkout-panel" aria-selected="false">
                         <i class="bi bi-cart-check me-1"></i> Checkout Section
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="video-tab" data-bs-toggle="tab" data-bs-target="#video-panel" type="button" role="tab" aria-controls="video-panel" aria-selected="false">
+                <li class="nav-item flex-shrink-0" role="presentation">
+                    <button class="nav-link text-nowrap" id="video-tab" data-bs-toggle="tab" data-bs-target="#video-panel" type="button" role="tab" aria-controls="video-panel" aria-selected="false">
                         <i class="bi bi-play-circle me-1"></i> Video Section
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="branding-tab" data-bs-toggle="tab" data-bs-target="#branding-panel" type="button" role="tab" aria-controls="branding-panel" aria-selected="false">
+                <li class="nav-item flex-shrink-0" role="presentation">
+                    <button class="nav-link text-nowrap" id="branding-tab" data-bs-toggle="tab" data-bs-target="#branding-panel" type="button" role="tab" aria-controls="branding-panel" aria-selected="false">
                         <i class="bi bi-image me-1"></i> Branding & Media
+                    </button>
+                </li>
+                <li class="nav-item flex-shrink-0" role="presentation">
+                    <button class="nav-link text-nowrap" id="scripts-tab" data-bs-toggle="tab" data-bs-target="#scripts-panel" type="button" role="tab" aria-controls="scripts-panel" aria-selected="false">
+                        <i class="bi bi-code-slash me-1"></i> Custom Scripts
                     </button>
                 </li>
             </ul>
@@ -51,17 +56,17 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Website Brand Name</label>
-                            <input type="text" name="site_name" class="form-control" value="{{ $settings['site_name'] ?? 'NOVA' }}" placeholder="e.g. NOVA">
+                            <input type="text" name="site_name" class="form-control" value="{{ $settings['site_name'] ?? 'Crowns IT' }}" placeholder="e.g. Crowns IT">
                             <small class="text-muted">Displays in header logo and footer.</small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Website Page Title Tag</label>
-                            <input type="text" name="site_title" class="form-control" value="{{ $settings['site_title'] ?? 'NOVA — Power your everyday' }}" placeholder="e.g. NOVA — Power your everyday">
+                            <input type="text" name="site_title" class="form-control" value="{{ $settings['site_title'] ?? 'Crowns IT — Power your everyday' }}" placeholder="e.g. Crowns IT — Power your everyday">
                             <small class="text-muted">Displays in browser tab title.</small>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="form-label fw-semibold">Meta Description (SEO)</label>
-                            <textarea name="site_description" class="form-control" rows="2">{{ $settings['site_description'] ?? 'NOVA প্রিমিয়াম টেক ও ভেষজ প্রোডাক্টস — ক্যাশ অন ডেলিভারি সহ দ্রুত ডেলিভারি।' }}</textarea>
+                            <textarea name="site_description" class="form-control" rows="2">{{ $settings['site_description'] ?? 'Crowns IT প্রিমিয়াম টেক ও ভেষজ প্রোডাক্টস — ক্যাশ অন ডেলিভারি সহ দ্রুত ডেলিভারি।' }}</textarea>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Delivery Charge (৳)</label>
@@ -115,7 +120,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Why Choose Us Eyebrow Tag</label>
-                            <input type="text" name="why_eyebrow" class="form-control" value="{{ $settings['why_eyebrow'] ?? 'কেন NOVA' }}">
+                            <input type="text" name="why_eyebrow" class="form-control" value="{{ $settings['why_eyebrow'] ?? 'কেন Crowns IT' }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Why Choose Us Section Title</label>
@@ -300,6 +305,22 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 7. Custom Scripts Settings -->
+                <div class="tab-pane fade" id="scripts-panel" role="tabpanel" aria-labelledby="scripts-tab">
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-semibold">Head Scripts</label>
+                            <textarea name="head_scripts" class="form-control font-monospace text-muted" rows="6" placeholder="<script>...</script>">{!! $settings['head_scripts'] ?? '' !!}</textarea>
+                            <small class="text-muted d-block mt-1">Injected just before the closing &lt;/head&gt; tag. (e.g., Meta Pixel, Google Analytics, Custom CSS)</small>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-semibold">Body Scripts</label>
+                            <textarea name="body_scripts" class="form-control font-monospace text-muted" rows="6" placeholder="<script>...</script>">{!! $settings['body_scripts'] ?? '' !!}</textarea>
+                            <small class="text-muted d-block mt-1">Injected just before the closing &lt;/body&gt; tag. (e.g., Live Chat, additional tracking scripts)</small>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <hr class="my-4">
@@ -399,4 +420,69 @@
         xhr.send(formData);
     });
 </script>
+@endpush
+
+@push('styles')
+<style>
+    /* Custom Scrollbar for Desktop */
+    .hide-scrollbar::-webkit-scrollbar {
+        height: 4px;
+    }
+    .hide-scrollbar::-webkit-scrollbar-track {
+        background: #f1f5f9; 
+        border-radius: 4px;
+    }
+    .hide-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1; 
+        border-radius: 4px;
+    }
+    .hide-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8; 
+    }
+    
+    /* Hide scrollbar completely on mobile (touch devices) */
+    @media (max-width: 768px) {
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    }
+    
+    /* Custom Beautiful Tabs */
+    .custom-tabs {
+        border-bottom: 2px solid #edf2f7;
+        gap: 8px;
+        padding-bottom: 0;
+    }
+    .custom-tabs .nav-item {
+        margin-bottom: -2px;
+    }
+    .custom-tabs .nav-link {
+        color: #64748b;
+        font-weight: 500;
+        font-size: 15px;
+        border: none;
+        border-bottom: 2px solid transparent;
+        padding: 12px 16px;
+        border-radius: 0;
+        transition: all 0.2s ease;
+        background: transparent;
+    }
+    .custom-tabs .nav-link:hover {
+        color: #3b82f6;
+        border-bottom: 2px solid #cbd5e1;
+    }
+    .custom-tabs .nav-link.active {
+        color: #2563eb;
+        border-bottom: 2px solid #2563eb;
+        font-weight: 600;
+    }
+    .custom-tabs .nav-link i {
+        font-size: 1.1em;
+        vertical-align: text-bottom;
+    }
+</style>
 @endpush
