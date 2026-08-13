@@ -13,6 +13,11 @@
                 <a href="{{ route('admin.orders.index', ['filter' => 'repeat']) }}" class="btn btn-sm {{ request('filter') == 'repeat' ? 'btn-danger' : 'btn-outline-danger' }} fw-semibold">
                     <i class="bi bi-people-fill me-1"></i> Repeat Customers ({{ $repeatCount }})
                 </a>
+
+                <!-- New Customers Button -->
+                <a href="{{ route('admin.orders.index', ['filter' => 'new']) }}" class="btn btn-sm {{ request('filter') == 'new' ? 'btn-primary' : 'btn-outline-primary' }} fw-semibold">
+                    <i class="bi bi-person-fill-add me-1"></i> New Customers ({{ $newCount ?? 0 }})
+                </a>
             </div>
 
             <!-- Status Filter Pills -->
@@ -52,7 +57,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($orders as $order)
+                    @foreach($orders as $order)
                     <tr>
                         <td><strong>#{{ $order->id }}</strong></td>
                         <td>
@@ -105,14 +110,7 @@
                             </div>
                         </td>
                     </tr>
-                    @empty
-                    <tr>
-                        <td colspan="9" class="text-center py-5 text-muted">
-                            <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
-                            No orders found.
-                        </td>
-                    </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>

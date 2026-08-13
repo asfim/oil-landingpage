@@ -27,8 +27,8 @@
       <div class="hero-stage">
         <div class="orbit"></div>
         <div class="orbit o2"></div>
-        <div class="hero-chip c1">🌿 ১০০% ভেষজ উপাদান</div>
-        <div class="hero-chip c2">💧 ১০০ml বিশুদ্ধ তেল</div>
+        <div class="hero-chip c1">{{ $settings['hero_chip_1'] ?? '🌿 ১০০% ভেষজ উপাদান' }}</div>
+        <div class="hero-chip c2">{{ $settings['hero_chip_2'] ?? '💧 ১০০ml বিশুদ্ধ তেল' }}</div>
         <div class="hero-product" id="heroBottleWrap">
           <div class="real-bottle-container">
             <div class="scroll-product-frame">
@@ -62,9 +62,9 @@
 <section id="products" class="section-pad">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">আমাদের কালেকশন</div>
-      <h2>৪টি প্রোডাক্ট, একটাই লক্ষ্য</h2>
-      <p>প্রতিটা প্রোডাক্ট বানানো হয়েছে আপনার দিন সহজ করার জন্য — সাউন্ড থেকে চার্জ পর্যন্ত।</p>
+      <div class="eyebrow">{{ $settings['collection_eyebrow'] ?? 'আমাদের কালেকশন' }}</div>
+      <h2>{{ $settings['collection_title'] ?? '৪টি প্রোডাক্ট, একটাই লক্ষ্য' }}</h2>
+      <p>{{ $settings['collection_description'] ?? 'প্রতিটা প্রোডাক্ট বানানো হয়েছে আপনার দিন সহজ করার জন্য — সাউন্ড থেকে চার্জ পর্যন্ত।' }}</p>
     </div>
 
     <div class="products-grid" id="productGrid">
@@ -80,7 +80,7 @@
           <div class="offer-card-inner">
             <div class="offer-img-box">
               <div class="offer-img-glow"></div>
-              <img src="{{ asset($p->img) }}" alt="{{ $p->name }}">
+              <img src="{{ asset($p->img) }}" alt="{{ $p->name }}" loading="lazy" width="280" height="280">
             </div>
             
             <div class="offer-details">
@@ -150,7 +150,7 @@
       @if($youtubeId)
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ $youtubeId }}?rel=0&showinfo=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5;"></iframe>
       @else
-        <video id="novaVideo" @if($posterUrl) poster="{{ $posterUrl }}" @endif preload="auto" playsinline controls>
+        <video id="crownsItVideo" @if($posterUrl) poster="{{ $posterUrl }}" @endif preload="auto" playsinline controls>
           @if($videoSrc)
             <source src="{{ $videoSrc }}" type="video/mp4">
           @endif
@@ -249,7 +249,7 @@
               @foreach($products as $p)
                 <div class="v-prod-item {{ $loop->first ? 'active' : '' }}" data-id="{{ $p->id }}">
                   <div class="v-prod-img">
-                    <img src="{{ asset($p->img) }}" alt="{{ $p->name }}">
+                    <img src="{{ asset($p->img) }}" alt="{{ $p->name }}" loading="lazy" width="60" height="60">
                   </div>
                   <div class="v-prod-info">
                     <div class="v-prod-name">{{ $p->name }}</div>
@@ -369,7 +369,7 @@
 }
 @media (max-width: 768px) {
   .sales-popup {
-    bottom: 80px; /* Above mobile sticky CTA */
+    bottom: 10px; /* Above mobile sticky CTA */
     left: 50%;
     transform: translateX(-50%) translateY(150px);
     width: 90%;
@@ -601,7 +601,7 @@
   revealEls.forEach(el => io.observe(el));
 
   /* Video Play Overlay */
-  const video = document.getElementById('novaVideo');
+  const video = document.getElementById('crownsItVideo');
   const playOverlay = document.getElementById('videoPlayOverlay');
   const playBtn = document.getElementById('playBtn');
   if (playBtn && video && playOverlay) {
@@ -825,10 +825,10 @@
           // Move to next index
           currentPopupIndex = (currentPopupIndex + 1) % salesPopups.length;
           
-          // Hide after 5 seconds, then wait 10 seconds to show next
+          // Hide after 5 seconds, then wait 5 seconds to show next
           setTimeout(() => {
             popupEl.classList.remove('show');
-            setTimeout(showNextPopup, 10000);
+            setTimeout(showNextPopup, 5000);
           }, 5000);
           
         }, 500); // Small delay to ensure transition finishes before changing content

@@ -35,3 +35,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('clear-logs', [\App\Http\Controllers\Admin\SystemController::class, 'clearLogs'])->name('clear-logs');
     });
 });
+
+Route::get('/copy-storage', function () {
+    $source = storage_path('app/public');
+    $destination = public_path('storage');
+    
+    try {
+        \Illuminate\Support\Facades\File::copyDirectory($source, $destination);
+        return 'All images successfully copied! Please check your website, images should show now.';
+    } catch (\Exception $e) {
+        return 'Error copying files: ' . $e->getMessage();
+    }
+});
+
+Route::get('/clear-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    return 'Cache cleared successfully.';
+});

@@ -71,6 +71,9 @@ class SettingController extends Controller
             Setting::updateOrCreate(['key' => 'video_poster'], ['value' => 'uploads/settings/' . $filename]);
         }
 
+        // Clear frontend cache so new settings show up immediately
+        \Illuminate\Support\Facades\Cache::forget('home_page_data');
+
         if ($request->ajax()) {
             return response()->json(['success' => true, 'message' => 'Settings updated successfully.']);
         }

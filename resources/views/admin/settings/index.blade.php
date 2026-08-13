@@ -24,6 +24,11 @@
                     </button>
                 </li>
                 <li class="nav-item flex-shrink-0" role="presentation">
+                    <button class="nav-link text-nowrap" id="collection-tab" data-bs-toggle="tab" data-bs-target="#collection-panel" type="button" role="tab" aria-controls="collection-panel" aria-selected="false">
+                        <i class="bi bi-grid me-1"></i> Collection Section
+                    </button>
+                </li>
+                <li class="nav-item flex-shrink-0" role="presentation">
                     <button class="nav-link text-nowrap" id="why-tab" data-bs-toggle="tab" data-bs-target="#why-panel" type="button" role="tab" aria-controls="why-panel" aria-selected="false">
                         <i class="bi bi-star me-1"></i> Why Choose Us
                     </button>
@@ -111,6 +116,32 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Order Button Text</label>
                             <input type="text" name="hero_btn_text" class="form-control" value="{{ $settings['hero_btn_text'] ?? 'Order Now' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Hero Chip 1</label>
+                            <input type="text" name="hero_chip_1" class="form-control" value="{{ $settings['hero_chip_1'] ?? '🌿 ১০০% ভেষজ উপাদান' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Hero Chip 2</label>
+                            <input type="text" name="hero_chip_2" class="form-control" value="{{ $settings['hero_chip_2'] ?? '💧 ১০০ml বিশুদ্ধ তেল' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collection Section Settings -->
+                <div class="tab-pane fade" id="collection-panel" role="tabpanel" aria-labelledby="collection-tab">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Collection Eyebrow Tag</label>
+                            <input type="text" name="collection_eyebrow" class="form-control" value="{{ $settings['collection_eyebrow'] ?? 'আমাদের কালেকশন' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Collection Section Title</label>
+                            <input type="text" name="collection_title" class="form-control" value="{{ $settings['collection_title'] ?? '৪টি প্রোডাক্ট, একটাই লক্ষ্য' }}">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-semibold">Collection Section Description</label>
+                            <textarea name="collection_description" class="form-control" rows="2">{{ $settings['collection_description'] ?? 'প্রতিটা প্রোডাক্ট বানানো হয়েছে আপনার দিন সহজ করার জন্য — সাউন্ড থেকে চার্জ পর্যন্ত।' }}</textarea>
                         </div>
                     </div>
                 </div>

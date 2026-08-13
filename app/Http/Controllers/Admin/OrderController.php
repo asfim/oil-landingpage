@@ -24,24 +24,30 @@ class OrderController extends Controller
         }
 
         $repeatOrderIds = [];
+        $newOrderIds = [];
         foreach ($phoneGroups as $ids) {
             if (count($ids) > 1) {
                 $repeatOrderIds = array_merge($repeatOrderIds, $ids);
+            } else {
+                $newOrderIds = array_merge($newOrderIds, $ids);
             }
         }
 
         $repeatCount = count($repeatOrderIds);
+        $newCount = count($newOrderIds);
 
         // Filtering logic
         if ($request->get('filter') === 'repeat') {
             $query->whereIn('id', $repeatOrderIds);
+        } elseif ($request->get('filter') === 'new') {
+            $query->whereIn('id', $newOrderIds);
         } elseif ($request->has('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
         }
 
         $orders = $query->get();
 
-        return view('admin.orders.index', compact('orders', 'repeatCount'));
+        return view('admin.orders.index', compact('orders', 'repeatCount', 'newCount'));
     }
 
     public function show(Order $order)
